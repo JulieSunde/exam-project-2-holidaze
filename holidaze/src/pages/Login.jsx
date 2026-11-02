@@ -2,9 +2,11 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginUser } from '../api/auth'
+import { useAuth } from '../context/AuthContext'
 
 function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -31,9 +33,7 @@ function Login() {
     try {
       const user = await loginUser(formData)
 
-      localStorage.setItem('accessToken', user.accessToken)
-      localStorage.setItem('user', JSON.stringify(user))
-
+      login(user)
       navigate('/')
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.')
