@@ -109,28 +109,35 @@ a:hover {
   border-radius: 16px;
   overflow: hidden;
   background-color: #fff;
-  box-shadow: 0 4px 20px rgb(36 55 70 / 6%);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 14px rgb(36 55 70 / 4%);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 26px rgb(36 55 70 / 12%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgb(36 55 70 / 10%);
 }
 
 .card-img-top {
+  display: block;
   width: 100%;
-  height: 220px;
+  height: 245px;
   object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.025);
 }
 
 .card-body {
-  padding: 1.25rem;
+  padding: 1.35rem;
 }
 
 .card-title {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.65rem;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .venue-location {
@@ -140,8 +147,30 @@ a:hover {
 
 .venue-price {
   color: var(--holidaze-navy);
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.card .btn-holidaze.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.card:hover .btn-holidaze {
+  background-color: var(--holidaze-navy);
+  border-color: var(--holidaze-navy);
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--holidaze-green);
+  outline-offset: 3px;
 }
 
 footer {
@@ -191,5 +220,239 @@ footer {
 
   #stays {
     padding-top: 4rem !important;
+  }
+}
+
+.venue-details-page {
+  padding-bottom: 4rem !important;
+}
+
+.venue-back-link {
+  color: var(--holidaze-navy);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.venue-back-link:hover {
+  color: var(--holidaze-green);
+}
+
+.venue-details-header h1 {
+  color: var(--holidaze-navy);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+  line-height: 1.2;
+}
+
+.venue-eyebrow {
+  color: var(--holidaze-green);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.venue-main-image {
+  height: 100%;
+  min-height: 320px;
+  max-height: 510px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--holidaze-sand);
+  box-shadow: 0 8px 28px rgb(36 55 70 / 8%);
+}
+
+.venue-main-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  max-height: 510px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.venue-main-image:hover img {
+  transform: scale(1.02);
+}
+
+.venue-image-placeholder {
+  display: flex;
+  min-height: 320px;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--holidaze-green);
+}
+
+.venue-image-placeholder i {
+  font-size: 2.5rem;
+}
+
+.venue-booking-card {
+  height: auto;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid rgb(232 227 217 / 90%);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 8px 28px rgb(36 55 70 / 7%);
+}
+
+.venue-booking-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.venue-booking-price .venue-price {
+  font-size: 1.65rem;
+}
+
+.venue-date-fields {
+  overflow: hidden;
+  border: 1px solid #d9ded9;
+  border-radius: 12px;
+}
+
+.venue-date-field {
+  min-width: 0;
+  padding: 0.85rem 0.75rem 0.65rem;
+}
+
+.venue-date-field + .venue-date-field {
+  border-top: 1px solid #d9ded9;
+}
+
+.venue-date-field label,
+.venue-guests-field label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--holidaze-navy);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+
+.venue-date-field input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  color: var(--holidaze-navy);
+  background: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.venue-date-field input:focus-visible {
+  outline: 2px solid var(--holidaze-green);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.venue-guests-field {
+  padding: 0.85rem 0.75rem;
+  border: 1px solid #d9ded9;
+  border-radius: 12px;
+}
+
+.venue-guests-field select {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  color: var(--holidaze-navy);
+  background-color: transparent;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.venue-booking-card .btn-holidaze {
+  min-height: 48px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.venue-booking-card .btn-holidaze:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgb(36 55 70 / 14%);
+}
+
+.venue-booking-card .btn-holidaze:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.venue-price-summary {
+  font-size: 0.9rem;
+}
+
+.venue-capacity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.venue-capacity > i {
+  display: flex;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  color: var(--holidaze-green);
+  background: rgb(69 107 96 / 9%);
+  font-size: 1.35rem;
+}
+
+.venue-description-text {
+  color: #52615c;
+  line-height: 1.85;
+  white-space: pre-line;
+}
+
+.venue-description-section h2 {
+  color: var(--holidaze-navy);
+}
+
+@media (min-width: 576px) {
+  .venue-date-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .venue-date-field + .venue-date-field {
+    border-top: 0;
+    border-left: 1px solid #d9ded9;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .venue-main-image,
+  .venue-main-image img {
+    max-height: 420px;
+  }
+
+  .venue-booking-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .venue-main-image,
+  .venue-main-image img {
+    min-height: 250px;
+    max-height: 300px;
+  }
+
+  .venue-booking-card {
+    padding: 1.25rem;
+    border-radius: 16px;
   }
 }

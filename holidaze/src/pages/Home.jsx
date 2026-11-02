@@ -29,7 +29,6 @@ function Home({ showAllVenues = false }) {
         setLoading(false)
       }
     }
-
     loadVenues()
   }, [])
 
@@ -279,7 +278,10 @@ function Home({ showAllVenues = false }) {
             className="col-12 col-md-6 col-lg-4"
             key={venue.id}
           >
-            <article className="card h-100">
+            <Link
+                to={`/venues/${venue.id}`}
+                className="card h-100 text-decoration-none text-reset"
+                >
               {venue.media?.[0]?.url && (
                 <img
                   src={venue.media[0].url}
@@ -288,28 +290,37 @@ function Home({ showAllVenues = false }) {
                 />
               )}
 
-              <div className="card-body">
-                <h3 className="card-title h5">
-                  {venue.name}
-                </h3>
+          <div className="card-body d-flex flex-column">
+            <h3 className="card-title h5">
+                {venue.name}
+            </h3>
 
-                <p className="venue-location">
-                  {venue.location?.city &&
-                    `${venue.location.city}, `}
-                  {venue.location?.country ||
-                    'Location not provided'}
-                </p>
+            <p className="venue-location d-flex align-items-center gap-2 mb-3">
+                <i className="bi bi-geo-alt" aria-hidden="true"></i>
+                <span>
+                {venue.location?.city && `${venue.location.city}, `}
+                {venue.location?.country || 'Location not provided'}
+                </span>
+            </p>
 
-                <p className="venue-price mb-2">
-                  {venue.price}{' '}
-                  <span className="fw-normal">per night</span>
-                </p>
+            <div className="d-flex align-items-center gap-2 text-secondary small mb-4">
+                <i className="bi bi-people" aria-hidden="true"></i>
+                <span>Up to {venue.maxGuests} guests</span>
+            </div>
 
-                <p className="card-text text-secondary mb-0">
-                  Up to {venue.maxGuests} guests
-                </p>
-              </div>
-            </article>
+            <div className="mt-auto pt-3 border-top d-flex align-items-center justify-content-between gap-2">
+            <div className="d-flex flex-column">
+                <span className="venue-price">${venue.price}</span>
+                <span className="text-secondary small">per night</span>
+            </div>
+
+            <span className="btn btn-holidaze btn-sm">
+                View details
+                <i className="bi bi-arrow-up-right ms-2" aria-hidden="true"></i>
+            </span>
+            </div>
+            </div>
+            </Link>
           </div>
         ))}
       </div>
@@ -328,9 +339,7 @@ function Home({ showAllVenues = false }) {
     )}
   </>
 )}
-
-      </section>
-
+</section>
       <section className="container py-5" id="about">
         <div className="row">
           <div className="col-lg-8 py-4">
