@@ -1,11 +1,20 @@
 
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './pages/Home'
 import VenueDetails from './pages/VenueDetails'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import { useAuth } from './context/AuthContext'
 
 function App() {
+  const { user, isLoggedIn, logout } = useAuth()
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate('/')
+  }
+
   return (
     <>
       <nav className="navbar navbar-expand-lg sticky-top border-bottom">
@@ -27,13 +36,93 @@ function App() {
               Contact
             </Link>
 
-            <Link className="nav-link" to="/login">
+            {!isLoggedIn ? (
+              <>
+             <Link className="btn btn-holidaze ms-lg-2" to="/login">
               Log in
             </Link>
 
-            <Link className="btn btn-holidaze ms-lg-2" to="/register">
+            <Link className="nav-link" to="/register">
               Sign up
             </Link>
+              </>
+            ) : (
+              <div className="dropdown">
+                <button
+                  className="btn btn-light rounded-pill dropdown-toggle d-flex align-items-center gap-2"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span
+                    className="rounded-circle"
+                    style={{
+                      width: '9px',
+                      height: '9px',
+                      backgroundColor: '#269B65',
+                      display: 'inline-block',
+                    }}
+                  />
+                  {user?.name || 'My profile'}
+                </button>
+
+                <ul className="dropdown-menu dropdown-menu-end mt-2">
+                  <li>
+                    <h6 className="dropdown-header">
+                      {user?.name || 'My account'}
+                    </h6>
+                  </li>
+
+                  <li>
+                    <Link className="dropdown-item" to="/profile">
+                      Profile
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link className="dropdown-item" to="/bookings">
+                      My bookings
+                    </Link>
+                  </li>
+
+                  {user?.venueManager && (
+                    <>
+                      <li><hr className="dropdown-divider" /></li>
+                      <li>
+                        <h6 className="dropdown-header">Hosting</h6>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/manager/venues">
+                          My venues
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/manager/venues/new">
+                          Add a venue
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/manager/dashboard">
+                          Booking overview
+                        </Link>
+                      </li>
+                    </>
+                  )}
+
+                  <li><hr className="dropdown-divider" /></li>
+
+                  <li>
+                    <button
+                      className="dropdown-item"
+                      type="button"
+                      onClick={handleLogout}
+                    >
+                      Log out
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </nav>
