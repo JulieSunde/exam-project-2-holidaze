@@ -1,7 +1,13 @@
-const API_URL = 'https://v2.api.noroff.dev/holidaze/venues'
+import { API_BASE_URL, API_KEY } from './config'
+
+const API_URL = `${API_BASE_URL}/holidaze/venues`
 
 export async function getVenues() {
-  const response = await fetch(API_URL)
+  const response = await fetch(API_URL, {
+    headers: {
+      'X-Noroff-API-Key': API_KEY,
+    },
+  })
 
   if (!response.ok) {
     throw new Error('Kunne ikke hente overnattingsstedene.')

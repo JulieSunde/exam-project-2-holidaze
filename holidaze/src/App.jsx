@@ -2,6 +2,8 @@
 import { Link, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import VenueDetails from './pages/VenueDetails'
+import Register from './pages/Register'
+import Login from './pages/Login'
 
 function App() {
   return (
@@ -21,12 +23,16 @@ function App() {
               About us
             </Link>
 
-            <Link className="nav-link" to="/#footer">
+            <Link className="nav-link" to="/#contact">
               Contact
             </Link>
 
-            <Link className="btn btn-holidaze ms-lg-2" to="/#stays">
-              Find a stay
+            <Link className="nav-link" to="/login">
+              Log in
+            </Link>
+
+            <Link className="btn btn-holidaze ms-lg-2" to="/register">
+              Sign up
             </Link>
           </div>
         </div>
@@ -34,6 +40,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
         <Route
