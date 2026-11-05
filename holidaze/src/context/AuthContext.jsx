@@ -26,6 +26,16 @@ export function AuthProvider({ children }) {
     setAccessToken(userData.accessToken)
   }
 
+  function updateUser(updatedData) {
+  const updatedUser = {
+    ...user,
+    ...updatedData,
+  }
+
+  localStorage.setItem('user', JSON.stringify(updatedUser))
+  setUser(updatedUser)
+}
+
   function logout() {
     localStorage.removeItem('user')
     localStorage.removeItem('accessToken')
@@ -44,6 +54,7 @@ export function AuthProvider({ children }) {
         isLoggedIn,
         login,
         logout,
+        updateUser,
       }}
     >
       {children}

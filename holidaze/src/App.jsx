@@ -6,6 +6,7 @@ import VenueDetails from './pages/VenueDetails'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import { useAuth } from './context/AuthContext'
+import Profile from './pages/Profile'
 
 function App() {
   const { user, isLoggedIn, logout } = useAuth()
@@ -90,7 +91,6 @@ function App() {
                 </>
               ) : (
                 <>
-                  {/* Desktop profile dropdown */}
                   <div className="dropdown mt-2 mt-lg-0 d-none d-lg-block">
                     <button
                       className="btn btn-light rounded-pill dropdown-toggle d-flex align-items-center gap-2"
@@ -167,7 +167,6 @@ function App() {
                     </ul>
                   </div>
 
-                  {/* Mobile profile links */}
                   <div className="d-lg-none w-100 mt-3">
                     <div className="border-top pt-3">
                       <div className="d-flex align-items-center gap-2 mb-2 px-2">
@@ -251,6 +250,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
 
