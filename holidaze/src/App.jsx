@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import { useAuth } from './context/AuthContext'
 import Profile from './pages/Profile'
+import MyBookings from './pages/MyBookings'
 
 function App() {
   const { user, isLoggedIn, logout } = useAuth()
@@ -124,7 +125,7 @@ function App() {
                       </li>
 
                       <li>
-                        <Link className="dropdown-item" to="/bookings">
+                        <Link className="dropdown-item" to="/my-bookings">
                           My bookings
                         </Link>
                       </li>
@@ -192,7 +193,7 @@ function App() {
 
                       <Link
                         className="nav-link px-2"
-                        to="/bookings"
+                        to="/my-bookings"
                         onClick={closeMenu}
                       >
                         My bookings
@@ -251,6 +252,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
 

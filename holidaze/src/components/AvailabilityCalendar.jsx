@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 
 function AvailabilityCalendar({
@@ -5,11 +6,19 @@ function AvailabilityCalendar({
   checkIn,
   checkOut,
   onDateSelect,
+  excludeBookingId = null,
 }) {
-  const [currentMonth, setCurrentMonth] = useState(() => {
-    const today = new Date()
-    return new Date(today.getFullYear(), today.getMonth(), 1)
-  })
+const [currentMonth, setCurrentMonth] = useState(() => {
+  const initialDate = checkIn
+    ? new Date(`${checkIn}T00:00:00`)
+    : new Date()
+
+  return new Date(
+    initialDate.getFullYear(),
+    initialDate.getMonth(),
+    1
+  )
+})
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -22,20 +31,18 @@ function AvailabilityCalendar({
     return `${year}-${month}-${day}`
   }
 
+  const otherBookings = bookings.filter(
+    (booking) => booking.id !== excludeBookingId
+  )
+
   function isUnavailable(date) {
     const dateString = formatDate(date)
 
     if (date < today) return true
 
-    return bookings.some((booking) => {
+    return otherBookings.some((booking) => {
       const start = booking.dateFrom.slice(0, 10)
       const end = booking.dateTo.slice(0, 10)
-
-      if (checkIn && !checkOut) {
-        return dateString > checkIn &&
-          dateString > start &&
-          dateString < end
-      }
 
       return dateString >= start && dateString < end
     })
@@ -49,7 +56,7 @@ function AvailabilityCalendar({
       return
     }
 
-    const hasConflict = bookings.some((booking) => {
+    const hasConflict = otherBookings.some((booking) => {
       const start = booking.dateFrom.slice(0, 10)
       const end = booking.dateTo.slice(0, 10)
 
