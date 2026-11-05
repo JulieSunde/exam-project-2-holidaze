@@ -1,0 +1,23 @@
+.navbar {
+  background-color: var(--holidaze-bg);
+}
+
+.navbar-brand {
+  color: var(--holidaze-navy);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.navbar-brand:hover {
+  color: var(--holidaze-green);
+}
+
+.nav-link {
+  color: var(--holidaze-navy);
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: var(--holidaze-green);
+}

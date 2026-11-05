@@ -1,0 +1,213 @@
+.profile-page {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  max-width: 1100px;
+}
+
+.profile-heading {
+  margin-bottom: 1.25rem;
+}
+
+.profile-heading h1 {
+  margin-bottom: 0.35rem;
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
+}
+
+.profile-header-compact {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--holidaze-sand);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgb(36 55 70 / 5%);
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  flex: 0 0 100px;
+  border: 3px solid var(--holidaze-sand);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-header-content h2 {
+  margin-bottom: 0.25rem;
+  font-size: 1.7rem;
+}
+
+.profile-eyebrow {
+  margin-bottom: 0.4rem;
+  color: var(--holidaze-green);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.profile-email {
+  margin-bottom: 0.6rem;
+  color: #68756f;
+}
+
+.profile-role {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: rgb(69 107 96 / 10%);
+  color: var(--holidaze-green);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.profile-dashboard {
+  align-items: stretch;
+}
+
+.profile-section-compact,
+.profile-host-section {
+  height: auto;
+  padding: 1.4rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--holidaze-sand);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(36 55 70 / 4%);
+}
+
+.profile-section-compact h2,
+.profile-host-section h2 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.profile-info-label {
+  margin-bottom: 0.2rem;
+  color: #68756f;
+  font-size: 0.78rem;
+}
+
+.profile-info-value {
+  margin-bottom: 0;
+  color: var(--holidaze-navy);
+  font-size: 0.95rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.profile-section-compact .form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.profile-section-compact .form-control {
+  min-height: 42px;
+}
+
+.profile-host-section {
+  height: calc(100% - 1rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-host-icon {
+  display: flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  border-radius: 14px;
+  color: var(--holidaze-green);
+  background: rgb(69 107 96 / 10%);
+  font-size: 1.4rem;
+}
+
+.profile-host-section h2 {
+  line-height: 1.3;
+}
+
+.profile-host-list {
+  padding-left: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #52615c;
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.profile-host-section .btn-holidaze {
+  margin-top: auto;
+}
+
+.profile-feedback {
+  padding: 0.9rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.profile-error {
+  color: #842029;
+  background: #f8d7da;
+}
+
+.profile-success {
+  color: #0f5132;
+  background: #d1e7dd;
+}
+
+.profile-remove-host {
+  align-self: center;
+  margin-top: 1.2rem;
+  padding: 0.4rem 0.7rem;
+  border: none;
+  background: transparent;
+  color: #8a7772;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.profile-remove-host:hover {
+  color: #a33f3f;
+}
+
+.profile-remove-host:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 576px) {
+  .profile-page {
+    padding-top: 1.25rem;
+    padding-bottom: 2rem;
+  }
+
+  .profile-header-compact {
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .profile-avatar {
+    width: 78px;
+    height: 78px;
+    flex-basis: 78px;
+  }
+
+  .profile-header-content h2 {
+    font-size: 1.35rem;
+    overflow-wrap: anywhere;
+  }
+
+  .profile-email {
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+  }
+
+  .profile-section-compact,
+  .profile-host-section {
+    padding: 1.2rem;
+  }
+}
