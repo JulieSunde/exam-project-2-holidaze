@@ -66,13 +66,14 @@
 }
 
 .venue-booking-card {
-  height: auto;
-  padding: clamp(1.25rem, 3vw, 1.75rem);
+  height: fit-content;
+  padding: 1rem;
   border: 1px solid rgb(232 227 217 / 90%);
-  border-radius: 20px;
+  border-radius: 16px;
   background: #fff;
   box-shadow: 0 8px 28px rgb(36 55 70 / 7%);
 }
+
 
 .venue-booking-price {
   display: flex;
@@ -230,4 +231,115 @@
     padding: 1.25rem;
     border-radius: 16px;
   }
+}
+
+.availability-calendar {
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.availability-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.availability-calendar-header h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.availability-calendar-header button {
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0.1rem 0.5rem;
+  color: #315b43;
+}
+
+.availability-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.1rem;
+  text-align: center;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.calendar-weekday {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #777;
+  padding-bottom: 0.2rem;
+}
+
+.calendar-day {
+  width: 100%;
+  max-width: 36px;
+  justify-self: center;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 50%;
+  background: #edf3ed;
+  color: #263b2d;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0;
+}
+
+.calendar-day:hover:not(:disabled) {
+  background: #d4e5d5;
+}
+
+.calendar-day.unavailable {
+  background: #f1eeee;
+  color: #aaa;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.calendar-day.selected {
+  background: #315b43;
+  color: #fff;
+}
+
+.calendar-day.in-range {
+  background: #dce9df;
+  border-radius: 8px;
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.calendar-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.calendar-legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-available {
+  background: #edf3ed;
+}
+
+.legend-unavailable {
+  background: #ddd;
 }

@@ -1,15 +1,31 @@
-
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { API_BASE_URL, API_KEY } from '../api/config'
+import { createBooking } from '../api/bookings'
+import AvailabilityCalendar from '../components/AvailabilityCalendar'
 
 function VenueDetails() {
   const { id } = useParams()
+  const { isLoggedIn, accessToken } = useAuth()
+
   const [venue, setVenue] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [bookingError, setBookingError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const [checkIn, setCheckIn] = useState('')
   const [checkOut, setCheckOut] = useState('')
   const [guests, setGuests] = useState(1)
+
+  function handleDateSelect(newCheckIn, newCheckOut) {
+    setCheckIn(newCheckIn)
+    setCheckOut(newCheckOut)
+    setBookingError('')
+    setSuccess('')
+  }
 
   useEffect(() => {
     async function loadVenue() {
@@ -18,7 +34,12 @@ function VenueDetails() {
         setError('')
 
         const response = await fetch(
-          `https://v2.api.noroff.dev/holidaze/venues/${id}`
+          `${API_BASE_URL}/holidaze/venues/${id}?_bookings=true`,
+          {
+            headers: {
+              'X-Noroff-API-Key': API_KEY,
+            },
+          }
         )
 
         if (!response.ok) {
@@ -36,6 +57,80 @@ function VenueDetails() {
 
     loadVenue()
   }, [id])
+
+  const nights =
+    checkIn && checkOut && checkOut > checkIn
+      ? Math.round(
+          (new Date(`${checkOut}T00:00:00`) -
+            new Date(`${checkIn}T00:00:00`)) /
+            86400000
+        )
+      : 0
+
+  const totalPrice = venue ? Number(venue.price) * nights : 0
+
+  async function handleBooking(event) {
+    event.preventDefault()
+
+    setBookingError('')
+    setSuccess('')
+
+    if (!isLoggedIn || !accessToken) {
+      setBookingError('Please log in before making a booking.')
+      return
+    }
+
+    if (!checkIn || !checkOut || checkOut <= checkIn) {
+      setBookingError('Please select valid check-in and check-out dates.')
+      return
+    }
+
+    if (guests < 1 || guests > venue.maxGuests) {
+      setBookingError('The number of guests exceeds the venue capacity.')
+      return
+    }
+
+    const existingBookings = venue.bookings || []
+
+    const hasConflict = existingBookings.some((booking) => {
+      return (
+        checkIn < booking.dateTo.slice(0, 10) &&
+        checkOut > booking.dateFrom.slice(0, 10)
+      )
+    })
+
+    if (hasConflict) {
+      setBookingError(
+        'These dates are not available. Please choose different dates.'
+      )
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+
+      await createBooking(
+        {
+          dateFrom: new Date(`${checkIn}T00:00:00.000Z`).toISOString(),
+          dateTo: new Date(`${checkOut}T00:00:00.000Z`).toISOString(),
+          guests: Number(guests),
+          venueId: venue.id,
+        },
+        accessToken
+      )
+
+      setSuccess('Your booking was successful! Enjoy your stay.')
+      setCheckIn('')
+      setCheckOut('')
+      setGuests(1)
+    } catch (error) {
+      setBookingError(
+        error.message || 'Could not complete your booking.'
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -59,23 +154,6 @@ function VenueDetails() {
   }
 
   const image = venue.media?.find((item) => item.url)
-  const today = new Date()
-  const minDate = [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, '0'),
-    String(today.getDate()).padStart(2, '0'),
-  ].join('-')
-
-  const nights =
-    checkIn && checkOut && checkOut > checkIn
-      ? Math.round(
-          (new Date(`${checkOut}T00:00:00`) -
-            new Date(`${checkIn}T00:00:00`)) /
-            86400000
-        )
-      : 0
-
-  const totalPrice = Number(venue.price) * nights
 
   return (
     <main className="container venue-details-page py-4 py-lg-5">
@@ -96,6 +174,7 @@ function VenueDetails() {
       </header>
 
       <div className="row g-4 g-xl-5 align-items-start">
+        {/* Left column: Image and venue description */}
         <div className="col-12 col-lg-7">
           <div className="venue-main-image">
             {image ? (
@@ -110,8 +189,29 @@ function VenueDetails() {
               </div>
             )}
           </div>
+
+          <section className="venue-description-section mt-4">
+            <div className="venue-capacity mb-4">
+              <i className="bi bi-people" aria-hidden="true"></i>
+              <div>
+                <h2 className="h5 mb-1">Space for your stay</h2>
+                <p className="text-secondary mb-0">
+                  Up to {venue.maxGuests} guests
+                </p>
+              </div>
+            </div>
+
+            <hr className="mb-4" />
+
+            <h2 className="h3 mb-3">About this place</h2>
+            <p className="venue-description-text">
+              {venue.description ||
+                'No description is available for this place yet.'}
+            </p>
+          </section>
         </div>
 
+        {/* Right column: Booking card */}
         <aside className="col-12 col-lg-5">
           <div className="venue-booking-card">
             <div className="venue-booking-price">
@@ -123,37 +223,29 @@ function VenueDetails() {
               Choose your dates to plan your stay.
             </p>
 
-            <form onSubmit={(event) => event.preventDefault()}>
-              <div className="venue-date-fields">
-                <div className="venue-date-field">
-                  <label htmlFor="checkIn">CHECK-IN</label>
-                  <input
-                    id="checkIn"
-                    type="date"
-                    value={checkIn}
-                    min={minDate}
-                    required
-                    onChange={(event) => {
-                      const nextCheckIn = event.target.value
-                      setCheckIn(nextCheckIn)
+            <form onSubmit={handleBooking}>
+              <AvailabilityCalendar
+                bookings={venue.bookings || []}
+                checkIn={checkIn}
+                checkOut={checkOut}
+                onDateSelect={handleDateSelect}
+              />
 
-                      if (checkOut && checkOut <= nextCheckIn) {
-                        setCheckOut('')
-                      }
-                    }}
-                  />
+              <div className="d-flex justify-content-between align-items-center mt-3 py-2 border-top border-bottom">
+                <div>
+                  <small className="text-secondary d-block">
+                    CHECK-IN
+                  </small>
+                  <strong>{checkIn || 'Select date'}</strong>
                 </div>
 
-                <div className="venue-date-field">
-                  <label htmlFor="checkOut">CHECK-OUT</label>
-                  <input
-                    id="checkOut"
-                    type="date"
-                    value={checkOut}
-                    min={checkIn || minDate}
-                    required
-                    onChange={(event) => setCheckOut(event.target.value)}
-                  />
+                <i className="bi bi-arrow-right text-secondary"></i>
+
+                <div>
+                  <small className="text-secondary d-block">
+                    CHECK-OUT
+                  </small>
+                  <strong>{checkOut || 'Select date'}</strong>
                 </div>
               </div>
 
@@ -162,7 +254,10 @@ function VenueDetails() {
                 <select
                   id="guests"
                   value={guests}
-                  onChange={(event) => setGuests(Number(event.target.value))}
+                  onChange={(event) => {
+                    setGuests(Number(event.target.value))
+                    setBookingError('')
+                  }}
                 >
                   {Array.from(
                     { length: Math.max(1, Number(venue.maxGuests) || 1) },
@@ -175,14 +270,48 @@ function VenueDetails() {
                 </select>
               </div>
 
-              <button
-                type="submit"
-                className="btn btn-holidaze w-100 mt-4"
-                disabled={!checkIn || !checkOut || checkOut <= checkIn}
-              >
-                Check availability
-                <i className="bi bi-arrow-right ms-2" aria-hidden="true"></i>
-              </button>
+              {bookingError && (
+                <div className="alert alert-danger mt-3 mb-0" role="alert">
+                  {bookingError}
+                </div>
+              )}
+
+              {success && (
+                <div className="alert alert-success mt-3 mb-0" role="status">
+                  {success}
+                  <div className="mt-2">
+                    <Link to="/my-bookings">
+                      View my bookings
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {!isLoggedIn ? (
+                <Link
+                  to="/login"
+                  className="btn btn-holidaze w-100 mt-4"
+                >
+                  Log in to book
+                  <i className="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                </Link>
+              ) : (
+                <button
+                  type="submit"
+                  className="btn btn-holidaze w-100 mt-4"
+                  disabled={
+                    !checkIn ||
+                    !checkOut ||
+                    checkOut <= checkIn ||
+                    isSubmitting
+                  }
+                >
+                  {isSubmitting ? 'Booking...' : 'Book now'}
+                  {!isSubmitting && (
+                    <i className="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                  )}
+                </button>
+              )}
             </form>
 
             {nights > 0 && Number.isFinite(totalPrice) && (
@@ -202,30 +331,6 @@ function VenueDetails() {
           </div>
         </aside>
       </div>
-
-      <section className="venue-description-section mt-5 pt-4">
-        <div className="row">
-          <div className="col-12 col-lg-8">
-            <div className="venue-capacity mb-4">
-              <i className="bi bi-people" aria-hidden="true"></i>
-              <div>
-                <h2 className="h5 mb-1">Space for your stay</h2>
-                <p className="text-secondary mb-0">
-                  Up to {venue.maxGuests} guests
-                </p>
-              </div>
-            </div>
-
-            <hr className="mb-4" />
-
-            <h2 className="h3 mb-3">About this place</h2>
-            <p className="venue-description-text">
-              {venue.description ||
-                'No description is available for this place yet.'}
-            </p>
-          </div>
-        </div>
-      </section>
     </main>
   )
 }
