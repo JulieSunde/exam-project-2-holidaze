@@ -1,13 +1,13 @@
-
 import { useState } from 'react'
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './pages/Home'
 import VenueDetails from './pages/VenueDetails'
 import Register from './pages/Register'
 import Login from './pages/Login'
-import { useAuth } from './context/AuthContext'
 import Profile from './pages/Profile'
 import MyBookings from './pages/MyBookings'
+import Hosting from './pages/Hosting'
+import { useAuth } from './context/AuthContext'
 
 function App() {
   const { user, isLoggedIn, logout } = useAuth()
@@ -28,7 +28,11 @@ function App() {
     <>
       <nav className="navbar navbar-expand-lg sticky-top border-bottom">
         <div className="container py-2">
-          <Link className="navbar-brand" to="/" onClick={closeMenu}>
+          <Link
+            className="navbar-brand"
+            to="/"
+            onClick={closeMenu}
+          >
             Holidaze
           </Link>
 
@@ -48,6 +52,7 @@ function App() {
             className={`collapse navbar-collapse ${menuOpen ? 'show' : ''}`}
           >
             <div className="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+
               <Link
                 className="nav-link"
                 to="/#stays"
@@ -108,6 +113,7 @@ function App() {
                           display: 'inline-block',
                         }}
                       />
+
                       {user?.name || 'My profile'}
                     </button>
 
@@ -119,42 +125,67 @@ function App() {
                       </li>
 
                       <li>
-                        <Link className="dropdown-item" to="/profile">
+                        <Link
+                          className="dropdown-item"
+                          to="/profile"
+                        >
                           Profile
                         </Link>
                       </li>
 
                       <li>
-                        <Link className="dropdown-item" to="/my-bookings">
+                        <Link
+                          className="dropdown-item"
+                          to="/my-bookings"
+                        >
                           My bookings
                         </Link>
                       </li>
 
                       {user?.venueManager && (
                         <>
-                          <li><hr className="dropdown-divider" /></li>
                           <li>
-                            <h6 className="dropdown-header">Hosting</h6>
+                            <hr className="dropdown-divider" />
                           </li>
+
                           <li>
-                            <Link className="dropdown-item" to="/manager/venues">
+                            <h6 className="dropdown-header">
+                              Hosting
+                            </h6>
+                          </li>
+
+                          <li>
+                            <Link
+                              className="dropdown-item"
+                              to="/hosting"
+                            >
                               My venues
                             </Link>
                           </li>
+
                           <li>
-                            <Link className="dropdown-item" to="/manager/venues/new">
+                            <Link
+                              className="dropdown-item"
+                              to="/hosting"
+                            >
                               Add a venue
                             </Link>
                           </li>
+
                           <li>
-                            <Link className="dropdown-item" to="/manager/dashboard">
+                            <Link
+                              className="dropdown-item"
+                              to="/manager/bookings"
+                            >
                               Booking overview
                             </Link>
                           </li>
                         </>
                       )}
 
-                      <li><hr className="dropdown-divider" /></li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
 
                       <li>
                         <button
@@ -167,7 +198,6 @@ function App() {
                       </li>
                     </ul>
                   </div>
-
                   <div className="d-lg-none w-100 mt-3">
                     <div className="border-top pt-3">
                       <div className="d-flex align-items-center gap-2 mb-2 px-2">
@@ -180,7 +210,10 @@ function App() {
                             display: 'inline-block',
                           }}
                         />
-                        <strong>{user?.name || 'My account'}</strong>
+
+                        <strong>
+                          {user?.name || 'My account'}
+                        </strong>
                       </div>
 
                       <Link
@@ -207,7 +240,7 @@ function App() {
 
                           <Link
                             className="nav-link px-2"
-                            to="/manager/venues"
+                            to="/hosting"
                             onClick={closeMenu}
                           >
                             My venues
@@ -215,7 +248,7 @@ function App() {
 
                           <Link
                             className="nav-link px-2"
-                            to="/manager/venues/new"
+                            to="/hosting"
                             onClick={closeMenu}
                           >
                             Add a venue
@@ -223,7 +256,7 @@ function App() {
 
                           <Link
                             className="nav-link px-2"
-                            to="/manager/dashboard"
+                            to="/manager/bookings"
                             onClick={closeMenu}
                           >
                             Booking overview
@@ -255,13 +288,27 @@ function App() {
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
+        <Route path="/hosting" element={<Hosting />} />
+        <Route
+          path="/manager/bookings"
+          element={
+            <main className="container py-5">
+              <h1>Booking overview</h1>
+              <p>
+                Your venue bookings will be displayed here.
+              </p>
+            </main>
+          }
+        />
 
         <Route
           path="*"
           element={
             <main className="container py-5">
               <h1>Page not found</h1>
-              <Link to="/">Back to home</Link>
+              <Link to="/">
+                Back to home
+              </Link>
             </main>
           }
         />
