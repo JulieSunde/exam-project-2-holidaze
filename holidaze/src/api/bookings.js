@@ -67,7 +67,6 @@ export async function cancelBooking(bookingId, accessToken) {
   return true
 }
 
-
 export async function updateBooking(bookingId, bookingData, accessToken) {
   const response = await fetch(
     `${API_BASE_URL}/holidaze/bookings/${bookingId}`,
@@ -91,4 +90,47 @@ export async function updateBooking(bookingId, bookingData, accessToken) {
   }
 
   return result.data
+}
+
+export async function getManagerBookings(name, accessToken) {
+  const headers = {
+    'X-Noroff-API-Key': API_KEY,
+    Authorization: `Bearer ${accessToken}`,
+  }
+
+  const allVenues = []
+  let page = 1
+  let pageCount = 1
+
+  do {
+    const response = await fetch(
+      `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}/venues?_bookings=true&limit=100&page=${page}`,
+      { headers }
+    )
+
+    const result = await response.json()
+
+    if (!response.ok) {
+      throw new Error(
+        result.errors?.[0]?.message ||
+        'Could not fetch venue bookings.'
+      )
+    }
+
+    allVenues.push(...result.data)
+    pageCount = result.meta?.pageCount || 1
+    page++
+  } while (page <= pageCount)
+
+  return allVenues.flatMap((venue) =>
+    (venue.bookings || []).map((booking) => ({
+      ...booking,
+      venue: {
+        id: venue.id,
+        name: venue.name,
+        media: venue.media,
+        location: venue.location,
+      },
+    }))
+  )
 }

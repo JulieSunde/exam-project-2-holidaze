@@ -8,6 +8,7 @@ import Profile from './pages/Profile'
 import MyBookings from './pages/MyBookings'
 import Hosting from './pages/Hosting'
 import { useAuth } from './context/AuthContext'
+import ManagerBookings from './pages/ManagerBookings'
 
 function App() {
   const { user, isLoggedIn, logout } = useAuth()
@@ -289,18 +290,8 @@ function App() {
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
         <Route path="/hosting" element={<Hosting />} />
-        <Route
-          path="/manager/bookings"
-          element={
-            <main className="container py-5">
-              <h1>Booking overview</h1>
-              <p>
-                Your venue bookings will be displayed here.
-              </p>
-            </main>
-          }
-        />
-
+       <Route path="/manager/bookings" element={<ManagerBookings />}
+       />
         <Route
           path="*"
           element={
