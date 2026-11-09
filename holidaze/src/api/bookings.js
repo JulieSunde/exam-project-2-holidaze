@@ -92,6 +92,7 @@ export async function updateBooking(bookingId, bookingData, accessToken) {
   return result.data
 }
 
+
 export async function getManagerBookings(name, accessToken) {
   const headers = {
     'X-Noroff-API-Key': API_KEY,
@@ -102,6 +103,7 @@ export async function getManagerBookings(name, accessToken) {
   let page = 1
   let pageCount = 1
 
+  // Fetch all venues belonging to the manager
   do {
     const response = await fetch(
       `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}/venues?_bookings=true&limit=100&page=${page}`,
@@ -122,15 +124,36 @@ export async function getManagerBookings(name, accessToken) {
     page++
   } while (page <= pageCount)
 
-  return allVenues.flatMap((venue) =>
-    (venue.bookings || []).map((booking) => ({
-      ...booking,
-      venue: {
-        id: venue.id,
-        name: venue.name,
-        media: venue.media,
-        location: venue.location,
-      },
-    }))
+  const bookings = await Promise.all(
+    allVenues.flatMap((venue) =>
+      (venue.bookings || []).map(async (booking) => {
+        const response = await fetch(
+          `${API_BASE_URL}/holidaze/bookings/${encodeURIComponent(booking.id)}?_customer=true&_venue=true`,
+          { headers }
+        )
+
+        const result = await response.json()
+
+        if (!response.ok) {
+          throw new Error(
+            result.errors?.[0]?.message ||
+            'Could not fetch booking details.'
+          )
+        }
+
+        return {
+          ...result.data,
+          venue: {
+            id: venue.id,
+            name: venue.name,
+            media: venue.media,
+            location: venue.location,
+          },
+        }
+      })
+    )
   )
+
+  return bookings
 }
+
