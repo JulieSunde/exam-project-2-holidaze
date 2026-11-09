@@ -1,7 +1,7 @@
-
 import { useEffect, useState } from 'react'
 import { getVenues } from '../api/venues'
 import { Link } from 'react-router-dom'
+import heroImage from '../assets/hero-image.png'
 
 function Home({ showAllVenues = false }) {
   const [venues, setVenues] = useState([])
@@ -31,10 +31,6 @@ function Home({ showAllVenues = false }) {
     }
     loadVenues()
   }, [])
-
-  const heroImage = venues.find(
-    (venue) => venue.media?.[0]?.url
-  )?.media[0].url
 
   const filteredVenues = venues.filter((venue) => {
     const query = submittedSearch.destination.toLowerCase().trim()
@@ -84,11 +80,9 @@ function Home({ showAllVenues = false }) {
     <main>
       <section
         className="hero-section"
-        style={{
-          backgroundImage: heroImage
-            ? `linear-gradient(rgba(20, 35, 32, 0.35), rgba(20, 35, 32, 0.35)), url("${heroImage}")`
-            : 'linear-gradient(135deg, #456b60, #243746)',
-        }}
+       style={{
+        backgroundImage: `linear-gradient(rgba(20, 35, 32, 0.35), rgba(20, 35, 32, 0.35)), url("${heroImage}")`,
+      }}
       >
         <div className="container py-5">
           <div className="row align-items-center py-lg-5">
@@ -340,19 +334,6 @@ function Home({ showAllVenues = false }) {
   </>
 )}
 </section>
-      <section className="container py-5" id="about">
-        <div className="row">
-          <div className="col-lg-8 py-4">
-            <h2 className="display-6 mb-3">
-              Your next great stay starts here.
-            </h2>
-            <p>
-              Holidaze helps you discover places to stay and find
-              the perfect setting for your next adventure.
-            </p>
-          </div>
-        </div>
-      </section>
     </main>
   )
 }
