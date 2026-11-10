@@ -1,4 +1,3 @@
-
 import { API_BASE_URL, API_KEY } from './config'
 
 const API_URL = `${API_BASE_URL}/holidaze/venues`
