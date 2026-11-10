@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate  } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { API_BASE_URL, API_KEY } from '../api/config'
-import {
-  getMyBookings,
-  cancelBooking,
-  updateBooking,
-} from '../api/bookings'
+import {getMyBookings,cancelBooking,updateBooking,} from '../api/bookings'
 import AvailabilityCalendar from '../components/AvailabilityCalendar'
 
 function MyBookings() {
-  const { user, accessToken } = useAuth()
+  const { user, accessToken, isLoggedIn } = useAuth()
 
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
@@ -26,23 +22,29 @@ function MyBookings() {
   const [venueBookings, setVenueBookings] = useState([])
   const [loadingCalendar, setLoadingCalendar] = useState(false)
 
-  useEffect(() => {
-    async function loadBookings() {
-      try {
-        setLoading(true)
-        setError('')
+    
+    useEffect(() => {
+        async function loadBookings() {
+        try {
+            setLoading(true)
+            setError('')
 
-        const data = await getMyBookings(user.name, accessToken)
-        setBookings(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
+            const data = await getMyBookings(user.name, accessToken)
+            setBookings(data)
+        } catch (err) {
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
+        }
+
+        if (isLoggedIn && user?.name && accessToken) {
+        loadBookings()
+        } else {
         setLoading(false)
-      }
-    }
+        }
+    }, [isLoggedIn, user?.name, accessToken])
 
-    loadBookings()
-  }, [user.name, accessToken])
 
   async function handleEditBooking(booking) {
     if (!booking.venue?.id) {
@@ -185,15 +187,19 @@ function MyBookings() {
     } finally {
       setCancellingId(null)
     }
-  }
+    }
 
-  if (loading) {
-    return <p className="text-center py-5">Loading your bookings...</p>
-  }
+    if (!isLoggedIn) {
+    return <Navigate to="/login" replace />
+    }
 
-  if (error) {
-    return <p className="alert alert-danger">{error}</p>
-  }
+    if (loading) {
+        return <p className="text-center py-5">Loading your bookings...</p>
+    }
+
+    if (error) {
+        return <p className="alert alert-danger">{error}</p>
+    }
 
   return (
     <main className="container py-5">
