@@ -92,10 +92,9 @@ export async function getManagerBookings(name, accessToken) {
 
   const allVenues = []
   let page = 1
-  let pageCount = 1
+  let hasMorePages = true
 
-  // Fetch all venues belonging to the manager
-  do {
+  while (hasMorePages) {
     const response = await fetch(
       `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}/venues?_bookings=true&limit=100&page=${page}`,
       { headers }
@@ -110,9 +109,11 @@ export async function getManagerBookings(name, accessToken) {
     }
 
     allVenues.push(...result.data)
-    pageCount = result.meta?.pageCount || 1
+
+    const pageCount = result.meta?.pageCount || 1
+    hasMorePages = page < pageCount
     page++
-  } while (page <= pageCount)
+  }
 
   const bookings = await Promise.all(
     allVenues.flatMap((venue) =>

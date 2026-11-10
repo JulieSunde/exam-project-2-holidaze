@@ -39,8 +39,6 @@ function MyBookings() {
 
     if (isLoggedIn && user?.name && accessToken) {
       loadBookings()
-    } else {
-      setLoading(false)
     }
   }, [isLoggedIn, user?.name, accessToken])
 

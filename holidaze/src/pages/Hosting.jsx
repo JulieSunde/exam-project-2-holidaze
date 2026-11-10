@@ -53,8 +53,6 @@ function Hosting() {
 
     if (isLoggedIn && user?.venueManager && user?.name && accessToken) {
       loadMyVenues()
-    } else {
-      setLoading(false)
     }
   }, [isLoggedIn, user?.venueManager, user?.name, accessToken])
 

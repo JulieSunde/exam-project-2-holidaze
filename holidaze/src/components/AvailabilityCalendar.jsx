@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+
+import { useState } from 'react'
 
 function AvailabilityCalendar({
   bookings = [],
@@ -12,14 +13,6 @@ function AvailabilityCalendar({
 
     return new Date(initialDate.getFullYear(), initialDate.getMonth(), 1)
   })
-
-  useEffect(() => {
-    if (checkIn) {
-      const date = new Date(`${checkIn}T00:00:00`)
-
-      setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1))
-    }
-  }, [checkIn])
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
