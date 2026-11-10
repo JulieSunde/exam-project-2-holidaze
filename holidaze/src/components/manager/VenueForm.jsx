@@ -8,10 +8,7 @@ function VenueForm({
   onCancel,
 }) {
   return (
-    <form
-      onSubmit={onSubmit}
-      className="card p-4 mb-4"
-    >
+    <form onSubmit={onSubmit} className="card p-4 mb-4">
       <h2 className="h4 mb-4">
         {editingVenue ? 'Edit venue' : 'Add a new venue'}
       </h2>

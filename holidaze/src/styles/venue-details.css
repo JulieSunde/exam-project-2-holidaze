@@ -74,7 +74,6 @@
   box-shadow: 0 8px 28px rgb(36 55 70 / 7%);
 }
 
-
 .venue-booking-price {
   display: flex;
   flex-wrap: wrap;
@@ -151,7 +150,9 @@
   min-height: 48px;
   border-radius: 10px;
   font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .venue-booking-card .btn-holidaze:hover:not(:disabled) {

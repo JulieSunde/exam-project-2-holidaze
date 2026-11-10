@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link, Navigate  } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { API_BASE_URL, API_KEY } from '../api/config'
-import {getMyBookings,cancelBooking,updateBooking,} from '../api/bookings'
+import { getMyBookings, cancelBooking, updateBooking } from '../api/bookings'
 import AvailabilityCalendar from '../components/AvailabilityCalendar'
 
 function MyBookings() {
@@ -22,29 +22,27 @@ function MyBookings() {
   const [venueBookings, setVenueBookings] = useState([])
   const [loadingCalendar, setLoadingCalendar] = useState(false)
 
-    
-    useEffect(() => {
-        async function loadBookings() {
-        try {
-            setLoading(true)
-            setError('')
+  useEffect(() => {
+    async function loadBookings() {
+      try {
+        setLoading(true)
+        setError('')
 
-            const data = await getMyBookings(user.name, accessToken)
-            setBookings(data)
-        } catch (err) {
-            setError(err.message)
-        } finally {
-            setLoading(false)
-        }
-        }
-
-        if (isLoggedIn && user?.name && accessToken) {
-        loadBookings()
-        } else {
+        const data = await getMyBookings(user.name, accessToken)
+        setBookings(data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
         setLoading(false)
-        }
-    }, [isLoggedIn, user?.name, accessToken])
+      }
+    }
 
+    if (isLoggedIn && user?.name && accessToken) {
+      loadBookings()
+    } else {
+      setLoading(false)
+    }
+  }, [isLoggedIn, user?.name, accessToken])
 
   async function handleEditBooking(booking) {
     if (!booking.venue?.id) {
@@ -70,8 +68,7 @@ function MyBookings() {
 
       if (!response.ok) {
         throw new Error(
-          result.errors?.[0]?.message ||
-            'Could not load venue availability.'
+          result.errors?.[0]?.message || 'Could not load venue availability.'
         )
       }
 
@@ -187,19 +184,19 @@ function MyBookings() {
     } finally {
       setCancellingId(null)
     }
-    }
+  }
 
-    if (!isLoggedIn) {
+  if (!isLoggedIn) {
     return <Navigate to="/login" replace />
-    }
+  }
 
-    if (loading) {
-        return <p className="text-center py-5">Loading your bookings...</p>
-    }
+  if (loading) {
+    return <p className="text-center py-5">Loading your bookings...</p>
+  }
 
-    if (error) {
-        return <p className="alert alert-danger">{error}</p>
-    }
+  if (error) {
+    return <p className="alert alert-danger">{error}</p>
+  }
 
   return (
     <main className="container py-5">
@@ -246,9 +243,7 @@ function MyBookings() {
                 )}
 
                 <div className="card-body">
-                  <h2 className="h5">
-                    {booking.venue?.name || 'Venue'}
-                  </h2>
+                  <h2 className="h5">{booking.venue?.name || 'Venue'}</h2>
 
                   {editingBookingId === booking.id ? (
                     <div>
@@ -291,9 +286,7 @@ function MyBookings() {
                           !dateTo
                         }
                       >
-                        {savingId === booking.id
-                          ? 'Saving...'
-                          : 'Save changes'}
+                        {savingId === booking.id ? 'Saving...' : 'Save changes'}
                       </button>
 
                       <button
@@ -321,40 +314,40 @@ function MyBookings() {
                         <strong>Guests:</strong> {booking.guests}
                       </p>
 
-                    <div className="d-grid gap-2 mt-3">
-                    <button
-                        type="button"
-                        className="btn btn-holidaze w-100"
-                        onClick={() => handleEditBooking(booking)}
-                        disabled={
-                        cancellingId === booking.id || loadingCalendar
-                        }
-                    >
-                        Change dates
-                    </button>
-
-                    <div className="d-flex gap-2">
-                        {booking.venue?.id && (
-                        <Link
-                            to={`/venues/${booking.venue.id}`}
-                            className="btn btn-outline-dark flex-fill"
-                        >
-                            View venue
-                        </Link>
-                        )}
-
+                      <div className="d-grid gap-2 mt-3">
                         <button
-                        type="button"
-                        className="btn btn-outline-danger flex-fill"
-                        onClick={() => handleCancelBooking(booking.id)}
-                        disabled={cancellingId === booking.id}
+                          type="button"
+                          className="btn btn-holidaze w-100"
+                          onClick={() => handleEditBooking(booking)}
+                          disabled={
+                            cancellingId === booking.id || loadingCalendar
+                          }
                         >
-                        {cancellingId === booking.id
-                            ? 'Cancelling...'
-                            : 'Cancel booking'}
+                          Change dates
                         </button>
-                    </div>
-                    </div>
+
+                        <div className="d-flex gap-2">
+                          {booking.venue?.id && (
+                            <Link
+                              to={`/venues/${booking.venue.id}`}
+                              className="btn btn-outline-dark flex-fill"
+                            >
+                              View venue
+                            </Link>
+                          )}
+
+                          <button
+                            type="button"
+                            className="btn btn-outline-danger flex-fill"
+                            onClick={() => handleCancelBooking(booking.id)}
+                            disabled={cancellingId === booking.id}
+                          >
+                            {cancellingId === booking.id
+                              ? 'Cancelling...'
+                              : 'Cancel booking'}
+                          </button>
+                        </div>
+                      </div>
                     </>
                   )}
                 </div>

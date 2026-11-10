@@ -46,9 +46,7 @@ function Login() {
       <div className="row justify-content-center">
         <div className="col-md-7 col-lg-5">
           <h1 className="mb-2">Welcome back</h1>
-          <p className="text-muted mb-4">
-            Log in to continue to Holidaze.
-          </p>
+          <p className="text-muted mb-4">Log in to continue to Holidaze.</p>
 
           {error && (
             <div className="alert alert-danger" role="alert">

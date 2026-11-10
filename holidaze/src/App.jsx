@@ -29,11 +29,7 @@ function App() {
     <>
       <nav className="navbar navbar-expand-lg sticky-top border-bottom">
         <div className="container py-2">
-          <Link
-            className="navbar-brand"
-            to="/"
-            onClick={closeMenu}
-          >
+          <Link className="navbar-brand" to="/" onClick={closeMenu}>
             Holidaze
           </Link>
 
@@ -53,28 +49,15 @@ function App() {
             className={`collapse navbar-collapse ${menuOpen ? 'show' : ''}`}
           >
             <div className="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-
-              <Link
-                className="nav-link"
-                to="/#stays"
-                onClick={closeMenu}
-              >
+              <Link className="nav-link" to="/#stays" onClick={closeMenu}>
                 Explore stays
               </Link>
 
-              <Link
-                className="nav-link"
-                to="/#about"
-                onClick={closeMenu}
-              >
+              <Link className="nav-link" to="/#about" onClick={closeMenu}>
                 About us
               </Link>
 
-              <Link
-                className="nav-link"
-                to="/#contact"
-                onClick={closeMenu}
-              >
+              <Link className="nav-link" to="/#contact" onClick={closeMenu}>
                 Contact
               </Link>
 
@@ -88,11 +71,7 @@ function App() {
                     Log in
                   </Link>
 
-                  <Link
-                    className="nav-link"
-                    to="/register"
-                    onClick={closeMenu}
-                  >
+                  <Link className="nav-link" to="/register" onClick={closeMenu}>
                     Sign up
                   </Link>
                 </>
@@ -126,19 +105,13 @@ function App() {
                       </li>
 
                       <li>
-                        <Link
-                          className="dropdown-item"
-                          to="/profile"
-                        >
+                        <Link className="dropdown-item" to="/profile">
                           Profile
                         </Link>
                       </li>
 
                       <li>
-                        <Link
-                          className="dropdown-item"
-                          to="/my-bookings"
-                        >
+                        <Link className="dropdown-item" to="/my-bookings">
                           My bookings
                         </Link>
                       </li>
@@ -150,25 +123,17 @@ function App() {
                           </li>
 
                           <li>
-                            <h6 className="dropdown-header">
-                              Hosting
-                            </h6>
+                            <h6 className="dropdown-header">Hosting</h6>
                           </li>
 
                           <li>
-                            <Link
-                              className="dropdown-item"
-                              to="/hosting"
-                            >
+                            <Link className="dropdown-item" to="/hosting">
                               My venues
                             </Link>
                           </li>
 
                           <li>
-                            <Link
-                              className="dropdown-item"
-                              to="/hosting"
-                            >
+                            <Link className="dropdown-item" to="/hosting">
                               Add a venue
                             </Link>
                           </li>
@@ -212,9 +177,7 @@ function App() {
                           }}
                         />
 
-                        <strong>
-                          {user?.name || 'My account'}
-                        </strong>
+                        <strong>{user?.name || 'My account'}</strong>
                       </div>
 
                       <Link
@@ -290,16 +253,13 @@ function App() {
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
         <Route path="/hosting" element={<Hosting />} />
-       <Route path="/manager/bookings" element={<ManagerBookings />}
-       />
+        <Route path="/manager/bookings" element={<ManagerBookings />} />
         <Route
           path="*"
           element={
             <main className="container py-5">
               <h1>Page not found</h1>
-              <Link to="/">
-                Back to home
-              </Link>
+              <Link to="/">Back to home</Link>
             </main>
           }
         />

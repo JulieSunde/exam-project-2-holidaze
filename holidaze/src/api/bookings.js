@@ -14,9 +14,7 @@ export async function getMyBookings(name, accessToken) {
   const result = await response.json()
 
   if (!response.ok) {
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not fetch bookings.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not fetch bookings.')
   }
 
   return result.data
@@ -36,9 +34,7 @@ export async function createBooking(bookingData, accessToken) {
   const result = await response.json()
 
   if (!response.ok) {
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not create booking.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not create booking.')
   }
 
   return result.data
@@ -59,9 +55,7 @@ export async function cancelBooking(bookingId, accessToken) {
   if (!response.ok) {
     const result = await response.json()
 
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not cancel booking.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not cancel booking.')
   }
 
   return true
@@ -84,14 +78,11 @@ export async function updateBooking(bookingId, bookingData, accessToken) {
   const result = await response.json()
 
   if (!response.ok) {
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not update booking.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not update booking.')
   }
 
   return result.data
 }
-
 
 export async function getManagerBookings(name, accessToken) {
   const headers = {
@@ -114,8 +105,7 @@ export async function getManagerBookings(name, accessToken) {
 
     if (!response.ok) {
       throw new Error(
-        result.errors?.[0]?.message ||
-        'Could not fetch venue bookings.'
+        result.errors?.[0]?.message || 'Could not fetch venue bookings.'
       )
     }
 
@@ -136,8 +126,7 @@ export async function getManagerBookings(name, accessToken) {
 
         if (!response.ok) {
           throw new Error(
-            result.errors?.[0]?.message ||
-            'Could not fetch booking details.'
+            result.errors?.[0]?.message || 'Could not fetch booking details.'
           )
         }
 
@@ -156,4 +145,3 @@ export async function getManagerBookings(name, accessToken) {
 
   return bookings
 }
-

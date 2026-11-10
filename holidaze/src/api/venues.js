@@ -16,7 +16,7 @@ export async function getVenues() {
   if (!firstResponse.ok) {
     throw new Error(
       firstResult.errors?.[0]?.message ||
-      'Kunne ikke hente overnattingsstedene.'
+        'Could not fetch venues.'
     )
   }
 
@@ -24,17 +24,16 @@ export async function getVenues() {
   const pageCount = firstResult.meta?.pageCount || 1
 
   for (let page = 2; page <= pageCount; page++) {
-    const response = await fetch(
-      `${API_URL}?limit=100&page=${page}`,
-      { headers }
-    )
+    const response = await fetch(`${API_URL}?limit=100&page=${page}`, {
+      headers,
+    })
 
     const result = await response.json()
 
     if (!response.ok) {
       throw new Error(
         result.errors?.[0]?.message ||
-        'Kunne ikke hente alle overnattingsstedene.'
+          'Could not fetch all venues.'
       )
     }
 
@@ -80,9 +79,7 @@ export async function createVenue(venueData, accessToken) {
   const result = await response.json()
 
   if (!response.ok) {
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not create venue.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not create venue.')
   }
 
   return result.data
@@ -102,9 +99,7 @@ export async function updateVenue(venueId, venueData, accessToken) {
   const result = await response.json()
 
   if (!response.ok) {
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not update venue.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not update venue.')
   }
 
   return result.data
@@ -122,9 +117,7 @@ export async function deleteVenue(venueId, accessToken) {
   if (!response.ok) {
     const result = await response.json()
 
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not delete venue.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not delete venue.')
   }
 
   return true

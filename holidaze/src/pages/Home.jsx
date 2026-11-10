@@ -80,9 +80,9 @@ function Home({ showAllVenues = false }) {
     <main>
       <section
         className="hero-section"
-       style={{
-        backgroundImage: `linear-gradient(rgba(20, 35, 32, 0.35), rgba(20, 35, 32, 0.35)), url("${heroImage}")`,
-      }}
+        style={{
+          backgroundImage: `linear-gradient(rgba(20, 35, 32, 0.35), rgba(20, 35, 32, 0.35)), url("${heroImage}")`,
+        }}
       >
         <div className="container py-5">
           <div className="row align-items-center py-lg-5">
@@ -96,8 +96,8 @@ function Home({ showAllVenues = false }) {
               </h1>
 
               <p className="lead mb-4">
-                Discover unique places to stay, find new favourites,
-                and plan your next getaway with Holidaze.
+                Discover unique places to stay, find new favourites, and plan
+                your next getaway with Holidaze.
               </p>
 
               <a className="btn btn-holidaze" href="#stays">
@@ -109,10 +109,7 @@ function Home({ showAllVenues = false }) {
           <form className="search-panel mb-5" onSubmit={handleSearch}>
             <div className="row g-3 align-items-end">
               <div className="col-12 col-md-6 col-xl-3">
-                <label
-                  htmlFor="destination"
-                  className="form-label fw-semibold"
-                >
+                <label htmlFor="destination" className="form-label fw-semibold">
                   Destination
                 </label>
 
@@ -127,27 +124,19 @@ function Home({ showAllVenues = false }) {
                     className="form-control"
                     placeholder="Where are you going?"
                     value={destination}
-                    onChange={(event) =>
-                      setDestination(event.target.value)
-                    }
+                    onChange={(event) => setDestination(event.target.value)}
                   />
                 </div>
               </div>
 
               <div className="col-12 col-md-6 col-xl-2">
-                <label
-                  htmlFor="checkIn"
-                  className="form-label fw-semibold"
-                >
+                <label htmlFor="checkIn" className="form-label fw-semibold">
                   Check-in
                 </label>
 
                 <div className="input-group">
                   <span className="input-group-text">
-                    <i
-                      className="bi bi-calendar-event"
-                      aria-hidden="true"
-                    ></i>
+                    <i className="bi bi-calendar-event" aria-hidden="true"></i>
                   </span>
 
                   <input
@@ -163,19 +152,13 @@ function Home({ showAllVenues = false }) {
               </div>
 
               <div className="col-12 col-md-6 col-xl-2">
-                <label
-                  htmlFor="checkOut"
-                  className="form-label fw-semibold"
-                >
+                <label htmlFor="checkOut" className="form-label fw-semibold">
                   Check-out
                 </label>
 
                 <div className="input-group">
                   <span className="input-group-text">
-                    <i
-                      className="bi bi-calendar-check"
-                      aria-hidden="true"
-                    ></i>
+                    <i className="bi bi-calendar-check" aria-hidden="true"></i>
                   </span>
 
                   <input
@@ -190,10 +173,7 @@ function Home({ showAllVenues = false }) {
               </div>
 
               <div className="col-12 col-md-6 col-xl-2">
-                <label
-                  htmlFor="guests"
-                  className="form-label fw-semibold"
-                >
+                <label htmlFor="guests" className="form-label fw-semibold">
                   Guests
                 </label>
 
@@ -223,10 +203,7 @@ function Home({ showAllVenues = false }) {
               </div>
 
               <div className="col-12 col-md-6 col-xl-3">
-                <button
-                  type="submit"
-                  className="btn btn-holidaze w-100"
-                >
+                <button type="submit" className="btn btn-holidaze w-100">
                   <i className="bi bi-search me-2" aria-hidden="true"></i>
                   Search stays
                 </button>
@@ -244,7 +221,7 @@ function Home({ showAllVenues = false }) {
 
           <h2 className="display-6">
             {showAllVenues ? 'All places to stay' : 'Explore places to stay'}
-            </h2>
+          </h2>
 
           <p className="text-secondary">
             Find the right place for your next trip.
@@ -259,81 +236,80 @@ function Home({ showAllVenues = false }) {
           </div>
         )}
 
+        {!loading && !error && (
+          <>
+            {filteredVenues.length > 0 ? (
+              <div className="row g-4">
+                {(showAllVenues
+                  ? filteredVenues
+                  : filteredVenues.slice(0, 6)
+                ).map((venue) => (
+                  <div className="col-12 col-md-6 col-lg-4" key={venue.id}>
+                    <Link
+                      to={`/venues/${venue.id}`}
+                      className="card h-100 text-decoration-none text-reset"
+                    >
+                      {venue.media?.[0]?.url && (
+                        <img
+                          src={venue.media[0].url}
+                          className="card-img-top"
+                          alt={venue.media[0].alt || venue.name}
+                        />
+                      )}
 
-{!loading && !error && (
-  <>
-    {filteredVenues.length > 0 ? (
-      <div className="row g-4">
-        {(showAllVenues
-          ? filteredVenues
-          : filteredVenues.slice(0, 6)
-        ).map((venue) => (
-          <div
-            className="col-12 col-md-6 col-lg-4"
-            key={venue.id}
-          >
-            <Link
-                to={`/venues/${venue.id}`}
-                className="card h-100 text-decoration-none text-reset"
-                >
-              {venue.media?.[0]?.url && (
-                <img
-                  src={venue.media[0].url}
-                  className="card-img-top"
-                  alt={venue.media[0].alt || venue.name}
-                />
-              )}
+                      <div className="card-body d-flex flex-column">
+                        <h3 className="card-title h5">{venue.name}</h3>
 
-          <div className="card-body d-flex flex-column">
-            <h3 className="card-title h5">
-                {venue.name}
-            </h3>
+                        <p className="venue-location d-flex align-items-center gap-2 mb-3">
+                          <i className="bi bi-geo-alt" aria-hidden="true"></i>
+                          <span>
+                            {venue.location?.city && `${venue.location.city}, `}
+                            {venue.location?.country || 'Location not provided'}
+                          </span>
+                        </p>
 
-            <p className="venue-location d-flex align-items-center gap-2 mb-3">
-                <i className="bi bi-geo-alt" aria-hidden="true"></i>
-                <span>
-                {venue.location?.city && `${venue.location.city}, `}
-                {venue.location?.country || 'Location not provided'}
-                </span>
-            </p>
+                        <div className="d-flex align-items-center gap-2 text-secondary small mb-4">
+                          <i className="bi bi-people" aria-hidden="true"></i>
+                          <span>Up to {venue.maxGuests} guests</span>
+                        </div>
 
-            <div className="d-flex align-items-center gap-2 text-secondary small mb-4">
-                <i className="bi bi-people" aria-hidden="true"></i>
-                <span>Up to {venue.maxGuests} guests</span>
-            </div>
+                        <div className="mt-auto pt-3 border-top d-flex align-items-center justify-content-between gap-2">
+                          <div className="d-flex flex-column">
+                            <span className="venue-price">${venue.price}</span>
+                            <span className="text-secondary small">
+                              per night
+                            </span>
+                          </div>
 
-            <div className="mt-auto pt-3 border-top d-flex align-items-center justify-content-between gap-2">
-            <div className="d-flex flex-column">
-                <span className="venue-price">${venue.price}</span>
-                <span className="text-secondary small">per night</span>
-            </div>
+                          <span className="btn btn-holidaze btn-sm">
+                            View details
+                            <i
+                              className="bi bi-arrow-up-right ms-2"
+                              aria-hidden="true"
+                            ></i>
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>
+                No places found. Try a different destination or guest count.
+              </p>
+            )}
 
-            <span className="btn btn-holidaze btn-sm">
-                View details
-                <i className="bi bi-arrow-up-right ms-2" aria-hidden="true"></i>
-            </span>
-            </div>
-            </div>
-            </Link>
-          </div>
-        ))}
-      </div>
-    ) : (
-      <p>
-        No places found. Try a different destination or guest count.
-      </p>
-    )}
-
-    {!showAllVenues && filteredVenues.length > 6 && (
-      <div className="text-center mt-5">
-        <Link to="/venues" className="btn btn-holidaze">
-          View all stays
-        </Link>
-      </div>
-    )}
-  </>
-)}
-</section>
+            {!showAllVenues && filteredVenues.length > 6 && (
+              <div className="text-center mt-5">
+                <Link to="/venues" className="btn btn-holidaze">
+                  View all stays
+                </Link>
+              </div>
+            )}
+          </>
+        )}
+      </section>
     </main>
   )
 }

@@ -61,8 +61,7 @@ function VenueDetails() {
   const nights =
     checkIn && checkOut && checkOut > checkIn
       ? Math.round(
-          (new Date(`${checkOut}T00:00:00`) -
-            new Date(`${checkIn}T00:00:00`)) /
+          (new Date(`${checkOut}T00:00:00`) - new Date(`${checkIn}T00:00:00`)) /
             86400000
         )
       : 0
@@ -124,9 +123,7 @@ function VenueDetails() {
       setCheckOut('')
       setGuests(1)
     } catch (error) {
-      setBookingError(
-        error.message || 'Could not complete your booking.'
-      )
+      setBookingError(error.message || 'Could not complete your booking.')
     } finally {
       setIsSubmitting(false)
     }
@@ -178,10 +175,7 @@ function VenueDetails() {
         <div className="col-12 col-lg-7">
           <div className="venue-main-image">
             {image ? (
-              <img
-                src={image.url}
-                alt={image.alt || venue.name}
-              />
+              <img src={image.url} alt={image.alt || venue.name} />
             ) : (
               <div className="venue-image-placeholder">
                 <i className="bi bi-house" aria-hidden="true"></i>
@@ -233,18 +227,14 @@ function VenueDetails() {
 
               <div className="d-flex justify-content-between align-items-center mt-3 py-2 border-top border-bottom">
                 <div>
-                  <small className="text-secondary d-block">
-                    CHECK-IN
-                  </small>
+                  <small className="text-secondary d-block">CHECK-IN</small>
                   <strong>{checkIn || 'Select date'}</strong>
                 </div>
 
                 <i className="bi bi-arrow-right text-secondary"></i>
 
                 <div>
-                  <small className="text-secondary d-block">
-                    CHECK-OUT
-                  </small>
+                  <small className="text-secondary d-block">CHECK-OUT</small>
                   <strong>{checkOut || 'Select date'}</strong>
                 </div>
               </div>
@@ -280,18 +270,13 @@ function VenueDetails() {
                 <div className="alert alert-success mt-3 mb-0" role="status">
                   {success}
                   <div className="mt-2">
-                    <Link to="/my-bookings">
-                      View my bookings
-                    </Link>
+                    <Link to="/my-bookings">View my bookings</Link>
                   </div>
                 </div>
               )}
 
               {!isLoggedIn ? (
-                <Link
-                  to="/login"
-                  className="btn btn-holidaze w-100 mt-4"
-                >
+                <Link to="/login" className="btn btn-holidaze w-100 mt-4">
                   Log in to book
                   <i className="bi bi-arrow-right ms-2" aria-hidden="true"></i>
                 </Link>
@@ -300,15 +285,15 @@ function VenueDetails() {
                   type="submit"
                   className="btn btn-holidaze w-100 mt-4"
                   disabled={
-                    !checkIn ||
-                    !checkOut ||
-                    checkOut <= checkIn ||
-                    isSubmitting
+                    !checkIn || !checkOut || checkOut <= checkIn || isSubmitting
                   }
                 >
                   {isSubmitting ? 'Booking...' : 'Book now'}
                   {!isSubmitting && (
-                    <i className="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                    <i
+                      className="bi bi-arrow-right ms-2"
+                      aria-hidden="true"
+                    ></i>
                   )}
                 </button>
               )}
@@ -318,8 +303,7 @@ function VenueDetails() {
               <div className="venue-price-summary mt-4 pt-3 border-top">
                 <div className="d-flex justify-content-between gap-3">
                   <span className="text-secondary">
-                    {venue.price} × {nights}{' '}
-                    {nights === 1 ? 'night' : 'nights'}
+                    {venue.price} × {nights} {nights === 1 ? 'night' : 'nights'}
                   </span>
                   <strong>${totalPrice.toLocaleString('en-US')}</strong>
                 </div>

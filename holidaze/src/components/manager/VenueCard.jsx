@@ -1,11 +1,6 @@
 import { Link } from 'react-router-dom'
 
-function VenueCard({
-  venue,
-  onEdit,
-  onDelete,
-  deleting,
-}) {
+function VenueCard({ venue, onEdit, onDelete, deleting }) {
   return (
     <div className="col-md-6 col-lg-4">
       <div className="card h-100">
@@ -25,11 +20,8 @@ function VenueCard({
           <h2 className="h5">{venue.name}</h2>
 
           <p>
-            <strong>Location:</strong>{' '}
-            {venue.location?.city || 'Not specified'}
-            {venue.location?.country
-              ? `, ${venue.location.country}`
-              : ''}
+            <strong>Location:</strong> {venue.location?.city || 'Not specified'}
+            {venue.location?.country ? `, ${venue.location.country}` : ''}
           </p>
 
           <p>
@@ -37,8 +29,7 @@ function VenueCard({
           </p>
 
           <p>
-            <strong>Maximum guests:</strong>{' '}
-            {venue.maxGuests}
+            <strong>Maximum guests:</strong> {venue.maxGuests}
           </p>
 
           <div className="d-grid gap-2 mt-3">

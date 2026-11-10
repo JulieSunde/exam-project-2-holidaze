@@ -1,103 +1,103 @@
-import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import {
   getMyVenues,
   createVenue,
   updateVenue,
   deleteVenue,
-} from "../api/venues";
+} from '../api/venues'
 
-import VenueForm from "../components/manager/VenueForm";
-import VenueCard from "../components/manager/VenueCard";
+import VenueForm from '../components/manager/VenueForm'
+import VenueCard from '../components/manager/VenueCard'
 
 const initialVenueForm = {
-  name: "",
-  description: "",
-  price: "",
-  maxGuests: "",
-  imageUrl: "",
-  imageAlt: "",
-  city: "",
-  country: "",
-};
+  name: '',
+  description: '',
+  price: '',
+  maxGuests: '',
+  imageUrl: '',
+  imageAlt: '',
+  city: '',
+  country: '',
+}
 
 function Hosting() {
-  const { user, accessToken, isLoggedIn } = useAuth();
-  const [venues, setVenues] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [creating, setCreating] = useState(false);
-  const [updating, setUpdating] = useState(false);
-  const [deletingVenueId, setDeletingVenueId] = useState(null);
-  const [editingVenue, setEditingVenue] = useState(null);
-  const [createError, setCreateError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [venueForm, setVenueForm] = useState(initialVenueForm);
+  const { user, accessToken, isLoggedIn } = useAuth()
+  const [venues, setVenues] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [showForm, setShowForm] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [updating, setUpdating] = useState(false)
+  const [deletingVenueId, setDeletingVenueId] = useState(null)
+  const [editingVenue, setEditingVenue] = useState(null)
+  const [createError, setCreateError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [venueForm, setVenueForm] = useState(initialVenueForm)
 
   useEffect(() => {
     async function loadMyVenues() {
       try {
-        setLoading(true);
-        setError("");
+        setLoading(true)
+        setError('')
 
-        const data = await getMyVenues(user.name, accessToken);
-        setVenues(data);
+        const data = await getMyVenues(user.name, accessToken)
+        setVenues(data)
       } catch (err) {
-        setError(err.message);
+        setError(err.message)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
 
     if (isLoggedIn && user?.venueManager && user?.name && accessToken) {
-      loadMyVenues();
+      loadMyVenues()
     } else {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [isLoggedIn, user?.venueManager, user?.name, accessToken]);
+  }, [isLoggedIn, user?.venueManager, user?.name, accessToken])
 
   function handleVenueInputChange(event) {
-    const { name, value } = event.target;
+    const { name, value } = event.target
 
     setVenueForm((currentForm) => ({
       ...currentForm,
       [name]: value,
-    }));
+    }))
   }
   function resetVenueForm() {
-    setVenueForm(initialVenueForm);
-    setEditingVenue(null);
-    setShowForm(false);
-    setCreateError("");
+    setVenueForm(initialVenueForm)
+    setEditingVenue(null)
+    setShowForm(false)
+    setCreateError('')
   }
 
   function handleAddVenue() {
-    setEditingVenue(null);
-    setVenueForm(initialVenueForm);
-    setCreateError("");
-    setSuccess("");
-    setShowForm(true);
+    setEditingVenue(null)
+    setVenueForm(initialVenueForm)
+    setCreateError('')
+    setSuccess('')
+    setShowForm(true)
   }
 
   function handleEditVenue(venue) {
-    setEditingVenue(venue);
+    setEditingVenue(venue)
 
     setVenueForm({
-      name: venue.name || "",
-      description: venue.description || "",
-      price: String(venue.price || ""),
-      maxGuests: String(venue.maxGuests || ""),
-      imageUrl: venue.media?.[0]?.url || "",
-      imageAlt: venue.media?.[0]?.alt || "",
-      city: venue.location?.city || "",
-      country: venue.location?.country || "",
-    });
+      name: venue.name || '',
+      description: venue.description || '',
+      price: String(venue.price || ''),
+      maxGuests: String(venue.maxGuests || ''),
+      imageUrl: venue.media?.[0]?.url || '',
+      imageAlt: venue.media?.[0]?.alt || '',
+      city: venue.location?.city || '',
+      country: venue.location?.country || '',
+    })
 
-    setShowForm(true);
-    setCreateError("");
-    setSuccess("");
+    setShowForm(true)
+    setCreateError('')
+    setSuccess('')
   }
 
   function getVenueFormData() {
@@ -118,97 +118,97 @@ function Hosting() {
         city: venueForm.city.trim(),
         country: venueForm.country.trim(),
       },
-    };
+    }
   }
 
   async function handleCreateVenue(event) {
-    event.preventDefault();
+    event.preventDefault()
 
-    setCreateError("");
-    setSuccess("");
+    setCreateError('')
+    setSuccess('')
 
     try {
-      setCreating(true);
+      setCreating(true)
 
-      const newVenue = await createVenue(getVenueFormData(), accessToken);
+      const newVenue = await createVenue(getVenueFormData(), accessToken)
 
-      setVenues((currentVenues) => [newVenue, ...currentVenues]);
+      setVenues((currentVenues) => [newVenue, ...currentVenues])
 
-      resetVenueForm();
-      setSuccess("Your venue has been created!");
+      resetVenueForm()
+      setSuccess('Your venue has been created!')
     } catch (err) {
-      setCreateError(err.message);
+      setCreateError(err.message)
     } finally {
-      setCreating(false);
+      setCreating(false)
     }
   }
 
   async function handleUpdateVenue(event) {
-    event.preventDefault();
-    setCreateError("");
-    setSuccess("");
+    event.preventDefault()
+    setCreateError('')
+    setSuccess('')
 
     try {
-      setUpdating(true);
+      setUpdating(true)
 
       const updatedVenue = await updateVenue(
         editingVenue.id,
         getVenueFormData(),
-        accessToken,
-      );
+        accessToken
+      )
 
       setVenues((currentVenues) =>
         currentVenues.map((venue) =>
-          venue.id === editingVenue.id ? updatedVenue : venue,
-        ),
-      );
+          venue.id === editingVenue.id ? updatedVenue : venue
+        )
+      )
 
-      resetVenueForm();
-      setSuccess("Your venue has been updated!");
+      resetVenueForm()
+      setSuccess('Your venue has been updated!')
     } catch (err) {
-      setCreateError(err.message);
+      setCreateError(err.message)
     } finally {
-      setUpdating(false);
+      setUpdating(false)
     }
   }
 
   async function handleDeleteVenue(venue) {
     const confirmed = window.confirm(
-      `Are you sure you want to delete "${venue.name}"? This action cannot be undone.`,
-    );
+      `Are you sure you want to delete "${venue.name}"? This action cannot be undone.`
+    )
 
-    if (!confirmed) return;
+    if (!confirmed) return
 
-    setCreateError("");
-    setSuccess("");
+    setCreateError('')
+    setSuccess('')
 
     try {
-      setDeletingVenueId(venue.id);
+      setDeletingVenueId(venue.id)
 
-      await deleteVenue(venue.id, accessToken);
+      await deleteVenue(venue.id, accessToken)
 
       setVenues((currentVenues) =>
-        currentVenues.filter((item) => item.id !== venue.id),
-      );
+        currentVenues.filter((item) => item.id !== venue.id)
+      )
 
-      setSuccess("Your venue has been deleted.");
+      setSuccess('Your venue has been deleted.')
     } catch (err) {
-      setCreateError(err.message);
+      setCreateError(err.message)
     } finally {
-      setDeletingVenueId(null);
+      setDeletingVenueId(null)
     }
   }
 
   if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace />
   }
 
   if (!user?.venueManager) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" replace />
   }
 
   if (loading) {
-    return <p className="text-center py-5">Loading your venues...</p>;
+    return <p className="text-center py-5">Loading your venues...</p>
   }
 
   if (error) {
@@ -216,7 +216,7 @@ function Hosting() {
       <main className="container py-5">
         <div className="alert alert-danger">{error}</div>
       </main>
-    );
+    )
   }
 
   return (
@@ -229,7 +229,7 @@ function Hosting() {
           className="btn btn-holidaze"
           onClick={showForm ? resetVenueForm : handleAddVenue}
         >
-          {showForm ? "Close form" : "Add venue"}
+          {showForm ? 'Close form' : 'Add venue'}
         </button>
       </div>
 
@@ -284,7 +284,7 @@ function Hosting() {
         </div>
       )}
     </main>
-  );
+  )
 }
 
-export default Hosting;
+export default Hosting

@@ -8,24 +8,16 @@ function AvailabilityCalendar({
   excludeBookingId = null,
 }) {
   const [currentMonth, setCurrentMonth] = useState(() => {
-    const initialDate = checkIn
-      ? new Date(`${checkIn}T00:00:00`)
-      : new Date()
+    const initialDate = checkIn ? new Date(`${checkIn}T00:00:00`) : new Date()
 
-    return new Date(
-      initialDate.getFullYear(),
-      initialDate.getMonth(),
-      1
-    )
+    return new Date(initialDate.getFullYear(), initialDate.getMonth(), 1)
   })
 
   useEffect(() => {
     if (checkIn) {
       const date = new Date(`${checkIn}T00:00:00`)
 
-      setCurrentMonth(
-        new Date(date.getFullYear(), date.getMonth(), 1)
-      )
+      setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1))
     }
   }, [checkIn])
 
@@ -137,10 +129,7 @@ function AvailabilityCalendar({
           const unavailable = isUnavailable(date)
           const selected = dateString === checkIn || dateString === checkOut
           const inRange =
-            checkIn &&
-            checkOut &&
-            dateString > checkIn &&
-            dateString < checkOut
+            checkIn && checkOut && dateString > checkIn && dateString < checkOut
 
           return (
             <button
@@ -162,8 +151,12 @@ function AvailabilityCalendar({
       </div>
 
       <div className="calendar-legend">
-        <span><i className="legend-available" /> Available</span>
-        <span><i className="legend-unavailable" /> Booked</span>
+        <span>
+          <i className="legend-available" /> Available
+        </span>
+        <span>
+          <i className="legend-unavailable" /> Booked
+        </span>
       </div>
     </div>
   )

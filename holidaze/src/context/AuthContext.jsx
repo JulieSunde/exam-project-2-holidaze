@@ -26,14 +26,14 @@ export function AuthProvider({ children }) {
   }
 
   function updateUser(updatedData) {
-  const updatedUser = {
-    ...user,
-    ...updatedData,
-  }
+    const updatedUser = {
+      ...user,
+      ...updatedData,
+    }
 
-  localStorage.setItem('user', JSON.stringify(updatedUser))
-  setUser(updatedUser)
-}
+    localStorage.setItem('user', JSON.stringify(updatedUser))
+    setUser(updatedUser)
+  }
 
   function logout() {
     localStorage.removeItem('user')

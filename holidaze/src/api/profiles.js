@@ -17,9 +17,7 @@ export async function updateProfile(name, accessToken, profileData) {
   const result = await response.json()
 
   if (!response.ok) {
-    throw new Error(
-      result.errors?.[0]?.message || 'Could not update profile.'
-    )
+    throw new Error(result.errors?.[0]?.message || 'Could not update profile.')
   }
 
   return result.data

@@ -14,16 +14,11 @@ function ManagerBookings() {
   useEffect(() => {
     async function loadBookings() {
       try {
-        const data = await getManagerBookings(
-          user.name,
-          accessToken
-        )
+        const data = await getManagerBookings(user.name, accessToken)
 
         setBookings(data)
       } catch (error) {
-        setError(
-          error.message || 'Could not load your bookings.'
-        )
+        setError(error.message || 'Could not load your bookings.')
       } finally {
         setLoading(false)
       }
@@ -45,9 +40,7 @@ function ManagerBookings() {
   return (
     <main className="container py-5">
       <div className="mb-4">
-        <p className="text-uppercase small fw-semibold mb-2">
-          HOSTING
-        </p>
+        <p className="text-uppercase small fw-semibold mb-2">HOSTING</p>
 
         <h1 className="display-6">Booking overview</h1>
 
@@ -68,8 +61,7 @@ function ManagerBookings() {
         <>
           <div className="mb-4">
             <h2 className="h5">
-              {bookings.length}{' '}
-              {bookings.length === 1 ? 'booking' : 'bookings'}
+              {bookings.length} {bookings.length === 1 ? 'booking' : 'bookings'}
             </h2>
           </div>
 

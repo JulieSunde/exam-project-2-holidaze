@@ -13,9 +13,7 @@ function Profile() {
 
   if (!user) {
     return (
-      <p className="text-center mt-5">
-        Please log in to view your profile.
-      </p>
+      <p className="text-center mt-5">Please log in to view your profile.</p>
     )
   }
 
@@ -26,16 +24,12 @@ function Profile() {
     setLoading(true)
 
     try {
-      const updatedProfile = await updateProfile(
-        user.name,
-        accessToken,
-        {
-          avatar: {
-            url: avatarUrl,
-            alt: avatarAlt,
-          },
-        }
-      )
+      const updatedProfile = await updateProfile(user.name, accessToken, {
+        avatar: {
+          url: avatarUrl,
+          alt: avatarAlt,
+        },
+      })
 
       updateUser(updatedProfile)
       setSuccess('Your profile picture has been updated!')
@@ -62,11 +56,9 @@ function Profile() {
     setLoading(true)
 
     try {
-      const updatedProfile = await updateProfile(
-        user.name,
-        accessToken,
-        { venueManager: !isRemovingAccess }
-      )
+      const updatedProfile = await updateProfile(user.name, accessToken, {
+        venueManager: !isRemovingAccess,
+      })
 
       updateUser(updatedProfile)
 
@@ -95,10 +87,7 @@ function Profile() {
       {/* Profile header */}
       <section className="profile-header profile-header-compact">
         <img
-          src={
-            user.avatar?.url ||
-            'https://placehold.co/130x130?text=Profile'
-          }
+          src={user.avatar?.url || 'https://placehold.co/130x130?text=Profile'}
           alt={user.avatar?.alt || 'Profile'}
           className="profile-avatar"
         />
@@ -207,8 +196,8 @@ function Profile() {
                 <h2>You're a host!</h2>
 
                 <p className="text-muted">
-                  You can share your accommodation with travellers
-                  through Holidaze.
+                  You can share your accommodation with travellers through
+                  Holidaze.
                 </p>
 
                 <ul className="profile-host-list">
@@ -240,8 +229,8 @@ function Profile() {
                 <h2>Share your place with the world</h2>
 
                 <p className="text-muted">
-                  Turn your accommodation into an opportunity.
-                  Become a Holidaze host and start welcoming travellers.
+                  Turn your accommodation into an opportunity. Become a Holidaze
+                  host and start welcoming travellers.
                 </p>
 
                 <ul className="profile-host-list">
