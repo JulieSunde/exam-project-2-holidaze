@@ -7,10 +7,7 @@ function Home({ showAllVenues = false }) {
   const [venues, setVenues] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-
   const [destination, setDestination] = useState('')
-  const [checkIn, setCheckIn] = useState('')
-  const [checkOut, setCheckOut] = useState('')
   const [guests, setGuests] = useState('1')
 
   const [submittedSearch, setSubmittedSearch] = useState({
@@ -29,6 +26,7 @@ function Home({ showAllVenues = false }) {
         setLoading(false)
       }
     }
+
     loadVenues()
   }, [])
 
@@ -51,11 +49,6 @@ function Home({ showAllVenues = false }) {
   function handleSearch(event) {
     event.preventDefault()
 
-    if (checkIn && checkOut && checkOut <= checkIn) {
-      setError('Check-out must be after check-in.')
-      return
-    }
-
     setError('')
 
     setSubmittedSearch({
@@ -67,14 +60,6 @@ function Home({ showAllVenues = false }) {
       behavior: 'smooth',
     })
   }
-
-  const today = new Date()
-
-  const todayString = [
-    today.getFullYear(),
-    String(today.getMonth() + 1).padStart(2, '0'),
-    String(today.getDate()).padStart(2, '0'),
-  ].join('-')
 
   return (
     <main>
@@ -108,7 +93,7 @@ function Home({ showAllVenues = false }) {
 
           <form className="search-panel mb-5" onSubmit={handleSearch}>
             <div className="row g-3 align-items-end">
-              <div className="col-12 col-md-6 col-xl-3">
+              <div className="col-12 col-md-6 col-xl-4">
                 <label htmlFor="destination" className="form-label fw-semibold">
                   Destination
                 </label>
@@ -129,50 +114,7 @@ function Home({ showAllVenues = false }) {
                 </div>
               </div>
 
-              <div className="col-12 col-md-6 col-xl-2">
-                <label htmlFor="checkIn" className="form-label fw-semibold">
-                  Check-in
-                </label>
-
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <i className="bi bi-calendar-event" aria-hidden="true"></i>
-                  </span>
-
-                  <input
-                    id="checkIn"
-                    type="date"
-                    className="form-control"
-                    value={checkIn}
-                    min={todayString}
-                    max={checkOut || undefined}
-                    onChange={(event) => setCheckIn(event.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="col-12 col-md-6 col-xl-2">
-                <label htmlFor="checkOut" className="form-label fw-semibold">
-                  Check-out
-                </label>
-
-                <div className="input-group">
-                  <span className="input-group-text">
-                    <i className="bi bi-calendar-check" aria-hidden="true"></i>
-                  </span>
-
-                  <input
-                    id="checkOut"
-                    type="date"
-                    className="form-control"
-                    value={checkOut}
-                    min={checkIn || todayString}
-                    onChange={(event) => setCheckOut(event.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="col-12 col-md-6 col-xl-2">
+              <div className="col-12 col-md-6 col-xl-4">
                 <label htmlFor="guests" className="form-label fw-semibold">
                   Guests
                 </label>
@@ -202,7 +144,7 @@ function Home({ showAllVenues = false }) {
                 </div>
               </div>
 
-              <div className="col-12 col-md-6 col-xl-3">
+              <div className="col-12 col-md-6 col-xl-4">
                 <button type="submit" className="btn btn-holidaze w-100">
                   <i className="bi bi-search me-2" aria-hidden="true"></i>
                   Search stays
@@ -263,7 +205,8 @@ function Home({ showAllVenues = false }) {
                         <p className="venue-location d-flex align-items-center gap-2 mb-3">
                           <i className="bi bi-geo-alt" aria-hidden="true"></i>
                           <span>
-                            {venue.location?.city && `${venue.location.city}, `}
+                            {venue.location?.city &&
+                              `${venue.location.city}, `}
                             {venue.location?.country || 'Location not provided'}
                           </span>
                         </p>
