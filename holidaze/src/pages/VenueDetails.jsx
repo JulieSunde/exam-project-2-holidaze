@@ -108,7 +108,7 @@ function VenueDetails() {
     try {
       setIsSubmitting(true)
 
-      await createBooking(
+      const createdBooking = await createBooking(
         {
           dateFrom: new Date(`${checkIn}T00:00:00.000Z`).toISOString(),
           dateTo: new Date(`${checkOut}T00:00:00.000Z`).toISOString(),
@@ -117,6 +117,11 @@ function VenueDetails() {
         },
         accessToken
       )
+
+      setVenue((currentVenue) => ({
+        ...currentVenue,
+        bookings: [...(currentVenue.bookings || []), createdBooking],
+      }))
 
       setSuccess('Your booking was successful! Enjoy your stay.')
       setCheckIn('')
@@ -171,7 +176,6 @@ function VenueDetails() {
       </header>
 
       <div className="row g-4 g-xl-5 align-items-start">
-        {/* Left column: Image and venue description */}
         <div className="col-12 col-lg-7">
           <div className="venue-main-image">
             {image ? (
@@ -205,7 +209,6 @@ function VenueDetails() {
           </section>
         </div>
 
-        {/* Right column: Booking card */}
         <aside className="col-12 col-lg-5">
           <div className="venue-booking-card">
             <div className="venue-booking-price">
