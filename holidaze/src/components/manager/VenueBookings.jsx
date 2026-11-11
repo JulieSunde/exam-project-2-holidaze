@@ -12,7 +12,10 @@ function VenueBookings({ bookings }) {
     today.setHours(0, 0, 0, 0)
 
     const checkIn = new Date(booking.dateFrom)
+    checkIn.setHours(0, 0, 0, 0)
+
     const checkOut = new Date(booking.dateTo)
+    checkOut.setHours(0, 0, 0, 0)
 
     if (checkOut <= today) {
       return 'Completed'

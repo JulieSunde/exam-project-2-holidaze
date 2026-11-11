@@ -4,7 +4,7 @@ function VenueCard({ venue, onEdit, onDelete, deleting }) {
   return (
     <div className="col-md-6 col-lg-4">
       <div className="card h-100">
-        {venue.media?.[0]?.url && (
+        {venue.media?.[0]?.url ? (
           <img
             src={venue.media[0].url}
             className="card-img-top"
@@ -14,6 +14,13 @@ function VenueCard({ venue, onEdit, onDelete, deleting }) {
               objectFit: 'cover',
             }}
           />
+        ) : (
+          <div
+            className="bg-light d-flex align-items-center justify-content-center"
+            style={{ height: '220px' }}
+          >
+            <span className="text-secondary">No image available</span>
+          </div>
         )}
 
         <div className="card-body">
