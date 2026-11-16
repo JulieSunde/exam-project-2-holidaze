@@ -5,6 +5,7 @@ import VenueDetails from './pages/VenueDetails'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
+import About from './pages/About'
 import MyBookings from './pages/MyBookings'
 import Hosting from './pages/Hosting'
 import { useAuth } from './context/AuthContext'
@@ -53,7 +54,7 @@ function App() {
                 Explore stays
               </Link>
 
-              <Link className="nav-link" to="/#about" onClick={closeMenu}>
+              <Link className="nav-link" to="/about" onClick={closeMenu}>
                 About us
               </Link>
 
@@ -249,6 +250,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/about" element={<About />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
