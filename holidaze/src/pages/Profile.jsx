@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { updateProfile } from '../api/profiles'
 
@@ -19,6 +20,9 @@ function Profile() {
 
   async function handleAvatarUpdate(event) {
     event.preventDefault()
+
+    if (loading) return
+
     setError('')
     setSuccess('')
     setLoading(true)
@@ -41,6 +45,8 @@ function Profile() {
   }
 
   async function handleHostingAccessToggle() {
+    if (loading) return
+
     const isRemovingAccess = user.venueManager
 
     const confirmed = window.confirm(
@@ -84,7 +90,6 @@ function Profile() {
         </p>
       </div>
 
-      {/* Profile header */}
       <section className="profile-header profile-header-compact">
         <img
           src={user.avatar?.url || 'https://placehold.co/130x130?text=Profile'}
@@ -206,9 +211,9 @@ function Profile() {
                   <li>Welcome travellers</li>
                 </ul>
 
-                <a href="/hosting" className="btn btn-holidaze w-100">
+                <Link to="/hosting" className="btn btn-holidaze w-100">
                   Go to hosting dashboard
-                </a>
+                </Link>
 
                 <button
                   type="button"
@@ -252,6 +257,7 @@ function Profile() {
           </div>
         </div>
       </div>
+
       {(error || success) && (
         <div
           className={`profile-feedback ${

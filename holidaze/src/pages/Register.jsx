@@ -27,7 +27,7 @@ function Register() {
     setMessage('')
     setError('')
 
-    if (!formData.email.endsWith('@stud.noroff.no')) {
+    if (!formData.email.trim().toLowerCase().endsWith('@stud.noroff.no')) {
       setError('Please use your @stud.noroff.no email address.')
       return
     }
