@@ -11,23 +11,22 @@ function ManagerBookings() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    async function loadBookings() {
-      try {
-        const data = await getManagerBookings(user.name, accessToken)
-
-        setBookings(data)
-      } catch (error) {
-        setError(error.message || 'Could not load your bookings.')
-      } finally {
-        setLoading(false)
-      }
+useEffect(() => {
+  async function loadBookings() {
+    try {
+      const data = await getManagerBookings(user.name, accessToken)
+      setBookings(data)
+    } catch (error) {
+      setError(error.message || 'Could not load your bookings.')
+    } finally {
+      setLoading(false)
     }
+  }
 
-    if (isLoggedIn && user?.venueManager && user?.name && accessToken) {
-      loadBookings()
-    }
-  }, [user, accessToken, isLoggedIn])
+  if (isLoggedIn && user?.venueManager && user?.name && accessToken) {
+    loadBookings()
+  }
+}, [user, accessToken, isLoggedIn])
 
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />

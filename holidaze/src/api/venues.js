@@ -15,8 +15,7 @@ export async function getVenues() {
 
   if (!firstResponse.ok) {
     throw new Error(
-      firstResult.errors?.[0]?.message ||
-        'Could not fetch venues.'
+      firstResult.errors?.[0]?.message || 'Could not fetch venues.'
     )
   }
 
@@ -32,8 +31,7 @@ export async function getVenues() {
 
     if (!response.ok) {
       throw new Error(
-        result.errors?.[0]?.message ||
-          'Could not fetch all venues.'
+        result.errors?.[0]?.message || 'Could not fetch all venues.'
       )
     }
 

@@ -52,6 +52,7 @@ function VenueForm({
             name="price"
             type="number"
             min="1"
+            step="0.01"
             className="form-control"
             value={venueForm.price}
             onChange={onInputChange}

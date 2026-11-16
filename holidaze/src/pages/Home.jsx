@@ -205,8 +205,7 @@ function Home({ showAllVenues = false }) {
                         <p className="venue-location d-flex align-items-center gap-2 mb-3">
                           <i className="bi bi-geo-alt" aria-hidden="true"></i>
                           <span>
-                            {venue.location?.city &&
-                              `${venue.location.city}, `}
+                            {venue.location?.city && `${venue.location.city}, `}
                             {venue.location?.country || 'Location not provided'}
                           </span>
                         </p>
