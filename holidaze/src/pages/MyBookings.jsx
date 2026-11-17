@@ -3,7 +3,14 @@ import { Link, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { API_BASE_URL, API_KEY } from '../api/config'
 import { getMyBookings, cancelBooking, updateBooking } from '../api/bookings'
-import AvailabilityCalendar from '../components/AvailabilityCalendar'
+import {
+  getTodayKey,
+  getBookingStatus,
+  getDaysUntil,
+  groupBookings,
+} from '../utils/bookingUtils'
+import BookingSection from '../components/bookings/BookingSection'
+import BookingSummary from '../components/bookings/BookingSummary'
 
 function MyBookings() {
   const { user, accessToken, isLoggedIn } = useAuth()
@@ -43,6 +50,11 @@ function MyBookings() {
   }, [isLoggedIn, user?.name, accessToken])
 
   async function handleEditBooking(booking) {
+    if (getBookingStatus(booking) !== 'Upcoming') {
+      setUpdateError('Only upcoming bookings can be changed.')
+      return
+    }
+
     if (!booking.venue?.id) {
       setUpdateError('Could not find this venue.')
       return
@@ -99,17 +111,20 @@ function MyBookings() {
     setUpdateError('')
     setSuccess('')
 
+    const currentBooking = bookings.find((booking) => booking.id === bookingId)
+
+    if (!currentBooking || getBookingStatus(currentBooking) !== 'Upcoming') {
+      setUpdateError('Only upcoming bookings can be changed.')
+      handleCancelEdit()
+      return
+    }
+
     if (!dateFrom || !dateTo || dateTo <= dateFrom) {
       setUpdateError('Please select valid check-in and check-out dates.')
       return
     }
 
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    const selectedCheckIn = new Date(`${dateFrom}T00:00:00`)
-
-    if (selectedCheckIn < today) {
+    if (dateFrom < getTodayKey()) {
       setUpdateError('Check-in cannot be in the past.')
       return
     }
@@ -153,6 +168,8 @@ function MyBookings() {
 
       setEditingBookingId(null)
       setVenueBookings([])
+      setDateFrom('')
+      setDateTo('')
       setSuccess('Your booking dates have been updated.')
     } catch (err) {
       setUpdateError(err.message || 'Could not update booking.')
@@ -162,6 +179,13 @@ function MyBookings() {
   }
 
   async function handleCancelBooking(bookingId) {
+    const booking = bookings.find((item) => item.id === bookingId)
+
+    if (!booking || getBookingStatus(booking) !== 'Upcoming') {
+      setCancelError('Only upcoming bookings can be cancelled.')
+      return
+    }
+
     const confirmed = window.confirm(
       'Are you sure you want to cancel this booking? This action cannot be undone.'
     )
@@ -175,7 +199,7 @@ function MyBookings() {
       await cancelBooking(bookingId, accessToken)
 
       setBookings((currentBookings) =>
-        currentBookings.filter((booking) => booking.id !== bookingId)
+        currentBookings.filter((item) => item.id !== bookingId)
       )
     } catch (err) {
       setCancelError(err.message || 'Could not cancel booking.')
@@ -194,6 +218,33 @@ function MyBookings() {
 
   if (error) {
     return <p className="alert alert-danger">{error}</p>
+  }
+
+  const {
+    upcoming: upcomingBookings,
+    ongoing: ongoingBookings,
+    completed: completedBookings,
+  } = groupBookings(bookings)
+
+  const nextBooking = upcomingBookings[0]
+
+  const daysUntilNextBooking = nextBooking
+    ? getDaysUntil(nextBooking.dateFrom)
+    : null
+
+  const sharedCardProps = {
+    editingBookingId,
+    dateFrom,
+    dateTo,
+    venueBookings,
+    loadingCalendar,
+    savingId,
+    cancellingId,
+    onEdit: handleEditBooking,
+    onCancelEdit: handleCancelEdit,
+    onDateSelect: handleDateSelect,
+    onSave: handleSaveChanges,
+    onCancel: handleCancelBooking,
   }
 
   return (
@@ -227,132 +278,33 @@ function MyBookings() {
           </Link>
         </div>
       ) : (
-        <div className="row g-4">
-          {bookings.map((booking) => (
-            <div className="col-md-6 col-lg-4" key={booking.id}>
-              <div className="card h-100">
-                {booking.venue?.media?.[0]?.url && (
-                  <img
-                    src={booking.venue.media[0].url}
-                    className="card-img-top"
-                    alt={booking.venue.media[0].alt || booking.venue.name}
-                    style={{ height: '220px', objectFit: 'cover' }}
-                  />
-                )}
+        <>
+          <BookingSummary
+            upcomingCount={upcomingBookings.length}
+            ongoingCount={ongoingBookings.length}
+            completedCount={completedBookings.length}
+            nextBooking={nextBooking}
+            daysUntilNextBooking={daysUntilNextBooking}
+          />
 
-                <div className="card-body">
-                  <h2 className="h5">{booking.venue?.name || 'Venue'}</h2>
+          <BookingSection
+            title="Upcoming stays"
+            bookings={upcomingBookings}
+            {...sharedCardProps}
+          />
 
-                  {editingBookingId === booking.id ? (
-                    <div>
-                      <p className="small text-secondary">
-                        Select your new check-in and check-out dates.
-                      </p>
+          <BookingSection
+            title="Ongoing stays"
+            bookings={ongoingBookings}
+            {...sharedCardProps}
+          />
 
-                      <AvailabilityCalendar
-                        bookings={venueBookings}
-                        checkIn={dateFrom}
-                        checkOut={dateTo}
-                        onDateSelect={handleDateSelect}
-                        excludeBookingId={booking.id}
-                      />
-
-                      <div className="d-flex justify-content-between gap-2 mt-3">
-                        <div>
-                          <small className="text-secondary d-block">
-                            CHECK-IN
-                          </small>
-                          <strong>{dateFrom || 'Select date'}</strong>
-                        </div>
-
-                        <div>
-                          <small className="text-secondary d-block">
-                            CHECK-OUT
-                          </small>
-                          <strong>{dateTo || 'Select date'}</strong>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        className="btn btn-holidaze me-2 mt-3"
-                        onClick={() => handleSaveChanges(booking.id)}
-                        disabled={
-                          savingId === booking.id ||
-                          loadingCalendar ||
-                          !dateFrom ||
-                          !dateTo
-                        }
-                      >
-                        {savingId === booking.id ? 'Saving...' : 'Save changes'}
-                      </button>
-
-                      <button
-                        type="button"
-                        className="btn btn-outline-secondary mt-3"
-                        onClick={handleCancelEdit}
-                        disabled={savingId === booking.id}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <>
-                      <p>
-                        <strong>Check-in:</strong>{' '}
-                        {new Date(booking.dateFrom).toLocaleDateString()}
-                      </p>
-
-                      <p>
-                        <strong>Check-out:</strong>{' '}
-                        {new Date(booking.dateTo).toLocaleDateString()}
-                      </p>
-
-                      <p>
-                        <strong>Guests:</strong> {booking.guests}
-                      </p>
-
-                      <div className="d-grid gap-2 mt-3">
-                        <button
-                          type="button"
-                          className="btn btn-holidaze w-100"
-                          onClick={() => handleEditBooking(booking)}
-                          disabled={
-                            cancellingId === booking.id || loadingCalendar
-                          }
-                        >
-                          Change dates
-                        </button>
-
-                        <div className="d-flex gap-2">
-                          {booking.venue?.id && (
-                            <Link
-                              to={`/venues/${booking.venue.id}`}
-                              className="btn btn-outline-dark flex-fill"
-                            >
-                              View venue
-                            </Link>
-                          )}
-
-                          <button
-                            type="button"
-                            className="btn btn-outline-danger flex-fill"
-                            onClick={() => handleCancelBooking(booking.id)}
-                            disabled={cancellingId === booking.id}
-                          >
-                            {cancellingId === booking.id
-                              ? 'Cancelling...'
-                              : 'Cancel booking'}
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+          <BookingSection
+            title="Completed stays"
+            bookings={completedBookings}
+            {...sharedCardProps}
+          />
+        </>
       )}
     </main>
   )
