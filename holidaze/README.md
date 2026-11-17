@@ -6,7 +6,7 @@ The idea behind the project is to make it easier for users to find and book acco
 
 ## Links
 
-- **Live site:** https://exam-project-2-holidaze.netlify.app/#stays
+- **Live site:** https://exam-project-2-holidaze.netlify.app
 - **GitHub repository:** https://github.com/JulieSunde/exam-project-2-holidaze.git
 - **Figma design:** https://www.figma.com/design/KINOU5B0LXOf4sYwCfDuBC/Untitled?node-id=15-128&t=6E93EhFsplJDm3pd-1
 - **Style guide:** https://www.figma.com/design/KINOU5B0LXOf4sYwCfDuBC/Untitled?node-id=15-128&t=6E93EhFsplJDm3pd-1
@@ -16,6 +16,7 @@ The idea behind the project is to make it easier for users to find and book acco
 ## What you can do
 
 ### As a visitor
+
 - Browse all available venues.
 - Search by destination and number of guests.
 - View details about a venue.
@@ -23,12 +24,14 @@ The idea behind the project is to make it easier for users to find and book acco
 - Register and log in.
 
 ### As a customer
+
 - Book a venue.
 - View upcoming bookings.
 - Change or cancel bookings.
 - Update your profile avatar.
 
 ### As a venue manager
+
 - Create new venues.
 - Edit existing venues.
 - Delete venues.
