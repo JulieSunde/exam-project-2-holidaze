@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import About from './pages/About'
+import Contact from './pages/Contact'
 import MyBookings from './pages/MyBookings'
 import Hosting from './pages/Hosting'
 import { useAuth } from './context/AuthContext'
@@ -58,7 +59,7 @@ function App() {
                 About us
               </Link>
 
-              <Link className="nav-link" to="/#contact" onClick={closeMenu}>
+              <Link className="nav-link" to="/contact" onClick={closeMenu}>
                 Contact
               </Link>
 
@@ -251,6 +252,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/venues" element={<Home showAllVenues />} />
         <Route path="/venues/:id" element={<VenueDetails />} />
