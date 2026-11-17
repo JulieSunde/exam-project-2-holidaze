@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import Home from './pages/Home'
 import VenueDetails from './pages/VenueDetails'
@@ -16,6 +16,17 @@ function App() {
   const { user, isLoggedIn, logout } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showLogoutMessage, setShowLogoutMessage] = useState(false)
+
+  useEffect(() => {
+    if (!showLogoutMessage) return
+
+    const timer = window.setTimeout(() => {
+      setShowLogoutMessage(false)
+    }, 4000)
+
+    return () => window.clearTimeout(timer)
+  }, [showLogoutMessage])
 
   function closeMenu() {
     setMenuOpen(false)
@@ -24,6 +35,7 @@ function App() {
   function handleLogout() {
     logout()
     closeMenu()
+    setShowLogoutMessage(true)
     navigate('/')
   }
 
@@ -251,6 +263,14 @@ function App() {
           </div>
         </div>
       </nav>
+
+      {showLogoutMessage && (
+        <div className="container mt-3">
+          <div className="alert alert-success" role="status">
+            You have been logged out successfully.
+          </div>
+        </div>
+      )}
 
       <Routes>
         <Route path="/" element={<Home />} />
