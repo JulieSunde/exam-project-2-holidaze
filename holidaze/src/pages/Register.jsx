@@ -1,7 +1,12 @@
 import { useState } from 'react'
-import { registerUser } from '../api/auth'
+import { useNavigate } from 'react-router-dom'
+import { registerUser, loginUser } from '../api/auth'
+import { useAuth } from '../context/AuthContext'
 
 function Register() {
+  const navigate = useNavigate()
+  const { login } = useAuth()
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,7 +32,9 @@ function Register() {
     setMessage('')
     setError('')
 
-    if (!formData.email.trim().toLowerCase().endsWith('@stud.noroff.no')) {
+    const email = formData.email.trim().toLowerCase()
+
+    if (!email.endsWith('@stud.noroff.no')) {
       setError('Please use your @stud.noroff.no email address.')
       return
     }
@@ -40,8 +47,28 @@ function Register() {
     setLoading(true)
 
     try {
-      await registerUser(formData)
-      setMessage('Your account has been created successfully!')
+      await registerUser({
+        ...formData,
+        email,
+      })
+
+      try {
+        const userData = await loginUser({
+          email,
+          password: formData.password,
+        })
+
+        login(userData)
+
+        navigate('/')
+      } catch (loginError) {
+        setMessage('Your account was created successfully.')
+        setError(
+          loginError.message ||
+            'Your account was created, but automatic login failed. Please log in manually.'
+        )
+      }
+
       setFormData({
         name: '',
         email: '',
