@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Navigate, Link } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Navigate, Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
   getMyVenues,
@@ -32,7 +32,9 @@ function getTodayKey() {
 
 function Hosting() {
   const { user, accessToken, isLoggedIn } = useAuth()
-
+  const location = useLocation()
+  const navigate = useNavigate()
+  const formRef = useRef(null)
   const [venues, setVenues] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -64,6 +66,50 @@ function Hosting() {
       loadMyVenues()
     }
   }, [isLoggedIn, user?.venueManager, user?.name, accessToken])
+
+  useEffect(() => {
+    if (!loading && location.state?.openAddVenue) {
+      requestAnimationFrame(() => {
+        setEditingVenue(null)
+        setVenueForm(initialVenueForm)
+        setCreateError('')
+        setSuccess('')
+        setShowForm(true)
+      })
+
+      navigate(
+        {
+          pathname: location.pathname,
+          search: location.search,
+          hash: location.hash,
+        },
+        {
+          replace: true,
+          state: null,
+        }
+      )
+    }
+  }, [
+    loading,
+    location.state,
+    location.pathname,
+    location.search,
+    location.hash,
+    navigate,
+  ])
+
+  useEffect(() => {
+    if (!showForm) return
+
+    const frameId = requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    })
+
+    return () => cancelAnimationFrame(frameId)
+  }, [showForm])
 
   function handleVenueInputChange(event) {
     const { name, value } = event.target
@@ -265,6 +311,7 @@ function Hosting() {
           </button>
         </div>
       </div>
+
       <div className="d-flex gap-2 mb-4">
         <Link to="/hosting" className="btn btn-holidaze">
           My Venues
@@ -317,15 +364,17 @@ function Hosting() {
       )}
 
       {showForm && (
-        <VenueForm
-          venueForm={venueForm}
-          editingVenue={editingVenue}
-          creating={creating}
-          updating={updating}
-          onInputChange={handleVenueInputChange}
-          onSubmit={editingVenue ? handleUpdateVenue : handleCreateVenue}
-          onCancel={resetVenueForm}
-        />
+        <div ref={formRef} style={{ scrollMarginTop: '100px' }}>
+          <VenueForm
+            venueForm={venueForm}
+            editingVenue={editingVenue}
+            creating={creating}
+            updating={updating}
+            onInputChange={handleVenueInputChange}
+            onSubmit={editingVenue ? handleUpdateVenue : handleCreateVenue}
+            onCancel={resetVenueForm}
+          />
+        </div>
       )}
 
       <section className="mt-5">

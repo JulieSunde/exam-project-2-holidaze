@@ -135,7 +135,11 @@ function App() {
                           </li>
 
                           <li>
-                            <Link className="dropdown-item" to="/hosting">
+                            <Link
+                              className="dropdown-item"
+                              to="/hosting"
+                              state={{ openAddVenue: true }}
+                            >
                               Add a venue
                             </Link>
                           </li>
@@ -166,6 +170,7 @@ function App() {
                       </li>
                     </ul>
                   </div>
+
                   <div className="d-lg-none w-100 mt-3">
                     <div className="border-top pt-3">
                       <div className="d-flex align-items-center gap-2 mb-2 px-2">
@@ -215,6 +220,7 @@ function App() {
                           <Link
                             className="nav-link px-2"
                             to="/hosting"
+                            state={{ openAddVenue: true }}
                             onClick={closeMenu}
                           >
                             Add a venue
