@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 
 function VenueCard({ venue, onEdit, onDelete, deleting }) {
   return (
-    <div className="col-md-6 col-lg-4">
-      <div className="card h-100">
+    <div className="col-12 col-md-6 col-lg-4">
+      <article className="card h-100 border-0 shadow-sm overflow-hidden">
         {venue.media?.[0]?.url ? (
           <img
             src={venue.media[0].url}
@@ -23,26 +23,29 @@ function VenueCard({ venue, onEdit, onDelete, deleting }) {
           </div>
         )}
 
-        <div className="card-body">
-          <h2 className="h5">{venue.name}</h2>
+        <div className="card-body d-flex flex-column">
+          <h3 className="h5 mb-2">{venue.name}</h3>
 
-          <p>
-            <strong>Location:</strong> {venue.location?.city || 'Not specified'}
-            {venue.location?.country ? `, ${venue.location.country}` : ''}
+          <p className="text-secondary mb-3">
+            {[venue.location?.city, venue.location?.country]
+              .filter(Boolean)
+              .join(', ') || 'Location not specified'}
           </p>
 
-          <p>
-            <strong>Price:</strong> ${venue.price} per night
-          </p>
+          <div className="border-top pt-3 mb-3">
+            <p className="mb-2">
+              <strong>Price:</strong> ${venue.price} per night
+            </p>
 
-          <p>
-            <strong>Maximum guests:</strong> {venue.maxGuests}
-          </p>
+            <p className="mb-0">
+              <strong>Maximum guests:</strong> {venue.maxGuests}
+            </p>
+          </div>
 
-          <div className="d-grid gap-2 mt-3">
+          <div className="d-grid gap-2 mt-auto">
             <button
               type="button"
-              className="btn btn-holidaze w-100"
+              className="btn btn-holidaze"
               onClick={() => onEdit(venue)}
               disabled={deleting}
             >
@@ -63,12 +66,12 @@ function VenueCard({ venue, onEdit, onDelete, deleting }) {
                 onClick={() => onDelete(venue)}
                 disabled={deleting}
               >
-                {deleting ? 'Deleting...' : 'Delete venue'}
+                {deleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>
         </div>
-      </div>
+      </article>
     </div>
   )
 }

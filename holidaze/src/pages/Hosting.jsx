@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
   getMyVenues,
@@ -7,7 +7,6 @@ import {
   updateVenue,
   deleteVenue,
 } from '../api/venues'
-
 import VenueForm from '../components/manager/VenueForm'
 import VenueCard from '../components/manager/VenueCard'
 
@@ -22,8 +21,18 @@ const initialVenueForm = {
   country: '',
 }
 
+function getTodayKey() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
 function Hosting() {
   const { user, accessToken, isLoggedIn } = useAuth()
+
   const [venues, setVenues] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -45,7 +54,7 @@ function Hosting() {
         const data = await getMyVenues(user.name, accessToken)
         setVenues(data)
       } catch (err) {
-        setError(err.message)
+        setError(err.message || 'Could not load your venues.')
       } finally {
         setLoading(false)
       }
@@ -64,6 +73,7 @@ function Hosting() {
       [name]: value,
     }))
   }
+
   function resetVenueForm() {
     setVenueForm(initialVenueForm)
     setEditingVenue(null)
@@ -212,23 +222,86 @@ function Hosting() {
   if (error) {
     return (
       <main className="container py-5">
-        <div className="alert alert-danger">{error}</div>
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
       </main>
     )
   }
 
+  const totalBookings = venues.reduce(
+    (total, venue) => total + (venue.bookings?.length || 0),
+    0
+  )
+
+  const upcomingBookings = venues.reduce((total, venue) => {
+    const upcoming = (venue.bookings || []).filter(
+      (booking) => booking.dateFrom.slice(0, 10) > getTodayKey()
+    )
+
+    return total + upcoming.length
+  }, 0)
+
   return (
     <main className="container py-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="mb-0">My hosting</h1>
+      <div className="mb-4">
+        <p className="text-uppercase small fw-semibold mb-2">HOSTING</p>
 
-        <button
-          type="button"
-          className="btn btn-holidaze"
-          onClick={showForm ? resetVenueForm : handleAddVenue}
-        >
-          {showForm ? 'Close form' : 'Add venue'}
-        </button>
+        <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
+          <div>
+            <h1 className="display-6 mb-2">My venues</h1>
+
+            <p className="text-secondary mb-0">
+              Manage your properties and keep track of your listings.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="btn btn-holidaze"
+            onClick={showForm ? resetVenueForm : handleAddVenue}
+          >
+            {showForm ? 'Close form' : 'Add venue'}
+          </button>
+        </div>
+      </div>
+      <div className="d-flex gap-2 mb-4">
+        <Link to="/hosting" className="btn btn-holidaze">
+          My Venues
+        </Link>
+
+        <Link to="/manager/bookings" className="btn btn-outline-secondary">
+          Booking Overview
+        </Link>
+      </div>
+
+      <div className="row g-3 mb-4">
+        <div className="col-12 col-sm-4">
+          <div className="card h-100 border-0 bg-light">
+            <div className="card-body">
+              <p className="text-secondary mb-1">Total venues</p>
+              <p className="display-6 fw-semibold mb-0">{venues.length}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-sm-4">
+          <div className="card h-100 border-0 bg-light">
+            <div className="card-body">
+              <p className="text-secondary mb-1">Total bookings</p>
+              <p className="display-6 fw-semibold mb-0">{totalBookings}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-sm-4">
+          <div className="card h-100 border-0 bg-light">
+            <div className="card-body">
+              <p className="text-secondary mb-1">Upcoming bookings</p>
+              <p className="display-6 fw-semibold mb-0">{upcomingBookings}</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {createError && (
@@ -255,32 +328,43 @@ function Hosting() {
         />
       )}
 
-      {venues.length === 0 ? (
-        <div className="text-center py-5">
-          <h2>No venues yet</h2>
-          <p>You haven't listed any accommodation yet.</p>
+      <section className="mt-5">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="h4 mb-0">Your venues</h2>
+          <span className="text-secondary small">
+            {venues.length} {venues.length === 1 ? 'venue' : 'venues'}
+          </span>
+        </div>
 
-          <button
-            type="button"
-            className="btn btn-holidaze"
-            onClick={handleAddVenue}
-          >
-            Add your first venue
-          </button>
-        </div>
-      ) : (
-        <div className="row g-4">
-          {venues.map((venue) => (
-            <VenueCard
-              key={venue.id}
-              venue={venue}
-              onEdit={handleEditVenue}
-              onDelete={handleDeleteVenue}
-              deleting={deletingVenueId === venue.id}
-            />
-          ))}
-        </div>
-      )}
+        {venues.length === 0 ? (
+          <div className="text-center py-5">
+            <h3 className="h5">No venues yet</h3>
+            <p className="text-secondary">
+              You haven't listed any accommodation yet.
+            </p>
+
+            <button
+              type="button"
+              className="btn btn-holidaze"
+              onClick={handleAddVenue}
+            >
+              Add your first venue
+            </button>
+          </div>
+        ) : (
+          <div className="row g-4">
+            {venues.map((venue) => (
+              <VenueCard
+                key={venue.id}
+                venue={venue}
+                onEdit={handleEditVenue}
+                onDelete={handleDeleteVenue}
+                deleting={deletingVenueId === venue.id}
+              />
+            ))}
+          </div>
+        )}
+      </section>
     </main>
   )
 }
