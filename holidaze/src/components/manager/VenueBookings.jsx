@@ -1,36 +1,9 @@
+import { formatDate, getBookingStatus } from '../../utils/bookingUtils'
+
 function VenueBookings({ bookings }) {
-  function formatDate(date) {
-    return new Date(date).toLocaleDateString('nb-NO', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    })
-  }
-
-  function getBookingStatus(booking) {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-
-    const checkIn = new Date(booking.dateFrom)
-    checkIn.setHours(0, 0, 0, 0)
-
-    const checkOut = new Date(booking.dateTo)
-    checkOut.setHours(0, 0, 0, 0)
-
-    if (checkOut <= today) {
-      return 'Completed'
-    }
-
-    if (checkIn <= today && checkOut > today) {
-      return 'Ongoing'
-    }
-
-    return 'Upcoming'
-  }
-
-  const sortedBookings = [...bookings].sort((a, b) => {
-    return new Date(a.dateFrom) - new Date(b.dateFrom)
-  })
+  const sortedBookings = [...bookings].sort(
+    (a, b) => new Date(a.dateFrom) - new Date(b.dateFrom)
+  )
 
   if (bookings.length === 0) {
     return (
@@ -47,14 +20,36 @@ function VenueBookings({ bookings }) {
         const status = getBookingStatus(booking)
 
         return (
-          <div className="col-12 col-lg-6" key={booking.id}>
-            <div className="card h-100 shadow-sm">
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center gap-2 mb-3">
-                  <h2 className="h5 mb-0">{booking.venue.name}</h2>
+          <div className="col-md-6 col-lg-4" key={booking.id}>
+            <article className="card h-100 shadow-sm">
+              <div
+                className="card-img-top"
+                style={{
+                  height: '220px',
+                  overflow: 'hidden',
+                  backgroundColor: '#f1f1f1',
+                }}
+              >
+                {booking.venue?.media?.[0]?.url ? (
+                  <img
+                    src={booking.venue.media[0].url}
+                    alt={booking.venue.media[0].alt || booking.venue.name}
+                    className="w-100 h-100"
+                    style={{ objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div className="w-100 h-100 d-flex align-items-center justify-content-center text-secondary">
+                    <span>No image available</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="card-body d-flex flex-column">
+                <div className="d-flex justify-content-between align-items-start gap-2 mb-3">
+                  <h2 className="h5 mb-0">{booking.venue?.name || 'Venue'}</h2>
 
                   <span
-                    className={`badge ${
+                    className={`badge flex-shrink-0 ${
                       status === 'Upcoming'
                         ? 'text-bg-primary'
                         : status === 'Ongoing'
@@ -65,19 +60,6 @@ function VenueBookings({ bookings }) {
                     {status}
                   </span>
                 </div>
-
-                {booking.venue.media?.[0]?.url && (
-                  <img
-                    src={booking.venue.media[0].url}
-                    alt={booking.venue.media[0].alt || booking.venue.name}
-                    className="img-fluid rounded mb-3"
-                    style={{
-                      width: '100%',
-                      height: '180px',
-                      objectFit: 'cover',
-                    }}
-                  />
-                )}
 
                 <div className="border-bottom pb-3 mb-3">
                   <h3 className="h6 mb-2">Customer information</h3>
@@ -99,7 +81,7 @@ function VenueBookings({ bookings }) {
                   </p>
                 </div>
 
-                <h3 className="h6 mb-2">Booking details</h3>
+                <h3 className="h6 mb-3">Booking details</h3>
 
                 <p className="mb-2">
                   <strong>Check-in:</strong> {formatDate(booking.dateFrom)}
@@ -109,15 +91,15 @@ function VenueBookings({ bookings }) {
                   <strong>Check-out:</strong> {formatDate(booking.dateTo)}
                 </p>
 
-                <p className="mb-2">
+                <p className="mb-3">
                   <strong>Guests:</strong> {booking.guests}
                 </p>
 
-                <p className="text-secondary small mb-0">
+                <p className="text-secondary small border-top pt-3 mt-auto mb-0">
                   Booking ID: {booking.id}
                 </p>
               </div>
-            </div>
+            </article>
           </div>
         )
       })}

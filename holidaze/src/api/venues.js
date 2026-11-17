@@ -43,7 +43,7 @@ export async function getVenues() {
 
 export async function getMyVenues(name, accessToken) {
   const response = await fetch(
-    `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}/venues`,
+    `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}/venues?_bookings=true`,
     {
       headers: {
         'X-Noroff-API-Key': API_KEY,
