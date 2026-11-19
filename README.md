@@ -8,10 +8,10 @@ The idea behind the project is to make it easier for users to find and book acco
 
 - **Live site:** https://exam-project-2-holidaze.netlify.app
 - **GitHub repository:** https://github.com/JulieSunde/exam-project-2-holidaze.git
-- **Figma design:** https://www.figma.com/design/KINOU5B0LXOf4sYwCfDuBC/Untitled?node-id=15-128&t=6E93EhFsplJDm3pd-1
-- **Style guide:** https://www.figma.com/design/KINOU5B0LXOf4sYwCfDuBC/Untitled?node-id=15-128&t=6E93EhFsplJDm3pd-1
+- **Figma design:** https://www.figma.com/design/KINOU5B0LXOf4sYwCfDuBC/Holidaze-prototype-and-style-guide?node-id=0-1&t=6E93EhFsplJDm3pd-1
+- **Style guide:** https://www.figma.com/design/KINOU5B0LXOf4sYwCfDuBC/Holidaze-prototype-and-style-guide?node-id=29-3062
 - **Gantt chart:** https://docs.google.com/spreadsheets/d/1P-Bl3e-qmFib640r_kuatWx56Rt6QgG7D2c6VhXnR_Y/edit?usp=sharing
-- **Kanban board:** https://trello.com/invite/b/6ad203bed0e60d0e6a6d4d47/ATTIb2adfb77745d9fc5cb87db4669b52f4619B2BF78/holidaze-project-exam-2
+- **Kanban board:** https://trello.com/invite/b/6ad203bed0e60d0e6a6d4d47/ATTIb2adfb77745d9fc5cb87db4669b52f4619B2BF78/holidaze-project-exam2
 
 ## What you can do
 
