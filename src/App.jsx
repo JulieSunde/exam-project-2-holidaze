@@ -40,7 +40,7 @@ function App() {
   }
 
   return (
-    <>
+    <div className="app-layout">
       <nav className="navbar navbar-expand-lg sticky-top border-bottom">
         <div className="container py-2">
           <Link className="navbar-brand" to="/" onClick={closeMenu}>
@@ -264,36 +264,38 @@ function App() {
         </div>
       </nav>
 
-      {showLogoutMessage && (
-        <div className="container mt-3">
-          <div className="alert alert-success" role="status">
-            You have been logged out successfully.
+      <div className="main-content">
+        {showLogoutMessage && (
+          <div className="container mt-3">
+            <div className="alert alert-success" role="status">
+              You have been logged out successfully.
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/my-bookings" element={<MyBookings />} />
-        <Route path="/venues" element={<Home showAllVenues />} />
-        <Route path="/venues/:id" element={<VenueDetails />} />
-        <Route path="/hosting" element={<Hosting />} />
-        <Route path="/manager/bookings" element={<ManagerBookings />} />
-        <Route
-          path="*"
-          element={
-            <main className="container py-5">
-              <h1>Page not found</h1>
-              <Link to="/">Back to home</Link>
-            </main>
-          }
-        />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="/venues" element={<Home showAllVenues />} />
+          <Route path="/venues/:id" element={<VenueDetails />} />
+          <Route path="/hosting" element={<Hosting />} />
+          <Route path="/manager/bookings" element={<ManagerBookings />} />
+          <Route
+            path="*"
+            element={
+              <main className="container py-5">
+                <h1>Page not found</h1>
+                <Link to="/">Back to home</Link>
+              </main>
+            }
+          />
+        </Routes>
+      </div>
 
       <footer id="footer" className="py-4">
         <div className="container">
@@ -302,7 +304,7 @@ function App() {
           </p>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
 

@@ -73,4 +73,15 @@ a:hover {
 footer {
   border-top: 1px solid var(--holidaze-sand);
   background-color: #fff;
+  margin-top: auto;
+}
+
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
 }
